@@ -1,0 +1,188 @@
+{%- liquid
+  assign account_url = routes.account_url
+  assign account_label = 'Account'
+  if shop.customer_accounts_enabled
+    if customer
+      assign account_label = 'My account'
+    else
+      assign account_url = routes.account_login_url
+      assign account_label = 'Sign in'
+    endif
+  endif
+
+  assign new_arrivals_key = section.settings.new_arrivals_collection_name | strip | downcase
+  assign homepage_key = section.settings.homepage_collection_name | strip | downcase
+  assign new_arrivals_collection = blank
+  assign homepage_collection = blank
+
+  for coll in collections
+    assign coll_title_key = coll.title | strip | downcase
+    assign coll_handle_key = coll.handle | strip | downcase
+    if new_arrivals_collection == blank and new_arrivals_key != blank
+      if coll_title_key == new_arrivals_key or coll_handle_key == new_arrivals_key
+        assign new_arrivals_collection = coll
+      endif
+    endif
+    if homepage_collection == blank and homepage_key != blank
+      if coll_title_key == homepage_key or coll_handle_key == homepage_key
+        assign homepage_collection = coll
+      endif
+    endif
+  endfor
+-%}
+
+<header class="site-header">
+  <div class="page-width">
+    <div class="site-header__inner">
+      <button class="menu-toggle" data-open-menu aria-label="{{ 'general.accessibility.menu' | t }}">
+        {% render 'icon', icon: 'menu' %}
+      </button>
+
+      <a href="{{ routes.root_url }}" class="site-header__logo">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 320 }}" alt="{{ shop.name | escape }}" width="160" height="44">
+        {%- else -%}
+          {{ shop.name }}
+        {%- endif -%}
+      </a>
+
+      <nav class="site-header__nav" aria-label="Primary">
+        <a href="{{ routes.root_url }}" class="site-header__nav-link">Home</a>
+
+        <div class="site-header__nav-item site-header__nav-item--dropdown">
+          <a href="{{ routes.collections_url }}" class="site-header__nav-link">
+            <span>Catalog</span>
+            {% render 'icon', icon: 'chevron-down' %}
+          </a>
+          <div class="site-header__dropdown">
+            <a href="{{ routes.all_products_collection_url }}" class="site-header__dropdown-link">All Products</a>
+            {%- for coll in collections -%}
+              {%- assign coll_handle_key = coll.handle | strip | downcase -%}
+              {%- assign coll_title_key = coll.title | strip | downcase -%}
+              {%- unless coll_handle_key == 'all' or coll_handle_key == 'frontpage' or coll_title_key == homepage_key -%}
+                <a href="{{ coll.url }}" class="site-header__dropdown-link">{{ coll.title }}</a>
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <a href="{{ new_arrivals_collection.url | default: routes.collections_url }}" class="site-header__nav-link">New Arrivals</a>
+        <a href="{{ section.settings.about_page | default: '/pages/about' }}" class="site-header__nav-link">About Us</a>
+
+        {%- for link in section.settings.menu.links -%}
+          {%- assign link_title_key = link.title | strip | downcase -%}
+          {%- unless link_title_key == 'home' or link_title_key == 'catalog' or link_title_key == 'new arrivals' or link_title_key == 'about us' -%}
+            {%- if link.links != blank -%}
+              <div class="site-header__nav-item site-header__nav-item--dropdown">
+                <a href="{{ link.url }}" class="site-header__nav-link">
+                  <span>{{ link.title }}</span>
+                  {% render 'icon', icon: 'chevron-down' %}
+                </a>
+                <div class="site-header__dropdown">
+                  {%- for child_link in link.links -%}
+                    <a href="{{ child_link.url }}" class="site-header__dropdown-link">{{ child_link.title }}</a>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- else -%}
+              <a href="{{ link.url }}" class="site-header__nav-link">{{ link.title }}</a>
+            {%- endif -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      </nav>
+
+      <div class="site-header__actions">
+        <a href="{{ routes.search_url }}" aria-label="{{ 'general.search.search' | t }}">{% render 'icon', icon: 'search' %}</a>
+        {%- if shop.customer_accounts_enabled -%}
+          <details class="site-header__account">
+            <summary aria-label="{{ account_label }}">
+              {% render 'icon', icon: 'user' %}
+            </summary>
+            <div class="site-header__account-menu">
+              {%- if customer -%}
+                <a href="{{ routes.account_url }}">My account</a>
+                <a href="{{ routes.account_url }}">Orders & profile</a>
+                <a href="{{ routes.account_logout_url }}">Log out</a>
+              {%- else -%}
+                <a href="{{ routes.account_login_url }}">Sign in</a>
+                <a href="{{ routes.account_register_url }}">Create account</a>
+              {%- endif -%}
+            </div>
+          </details>
+        {%- else -%}
+          <a href="{{ account_url }}" aria-label="{{ account_label }}">{% render 'icon', icon: 'user' %}</a>
+        {%- endif -%}
+        <button data-open-cart aria-label="{{ 'cart.general.title' | t }}">
+          {% render 'icon', icon: 'bag' %}
+          <span class="cart-count" data-cart-count {% if cart.item_count == 0 %}style="display:none"{% endif %}>{{ cart.item_count }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<aside class="mobile-drawer" id="MobileDrawer" aria-hidden="true">
+  <button class="mobile-drawer__close" data-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'icon', icon: 'close' %}</button>
+  <ul>
+    <li><a href="{{ routes.root_url }}">Home</a></li>
+    <li>
+      <details class="mobile-drawer__group">
+        <summary>Catalog</summary>
+        <div class="mobile-drawer__subnav">
+          <a href="{{ routes.all_products_collection_url }}">All Products</a>
+          {%- for coll in collections -%}
+            {%- assign coll_handle_key = coll.handle | strip | downcase -%}
+            {%- assign coll_title_key = coll.title | strip | downcase -%}
+            {%- unless coll_handle_key == 'all' or coll_handle_key == 'frontpage' or coll_title_key == homepage_key -%}
+              <a href="{{ coll.url }}">{{ coll.title }}</a>
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+      </details>
+    </li>
+    <li><a href="{{ new_arrivals_collection.url | default: routes.collections_url }}">New Arrivals</a></li>
+    <li><a href="{{ section.settings.about_page | default: '/pages/about' }}">About Us</a></li>
+    {%- for link in section.settings.menu.links -%}
+      {%- assign link_title_key = link.title | strip | downcase -%}
+      {%- unless link_title_key == 'home' or link_title_key == 'catalog' or link_title_key == 'new arrivals' or link_title_key == 'about us' -%}
+        <li>
+          {%- if link.links != blank -%}
+            <details class="mobile-drawer__group">
+              <summary>{{ link.title }}</summary>
+              <div class="mobile-drawer__subnav">
+                {%- for child_link in link.links -%}
+                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                {%- endfor -%}
+              </div>
+            </details>
+          {%- else -%}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- endif -%}
+        </li>
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- if shop.customer_accounts_enabled -%}
+      {%- if customer -%}
+        <li><a href="{{ routes.account_url }}">My account</a></li>
+        <li><a href="{{ routes.account_logout_url }}">Log out</a></li>
+      {%- else -%}
+        <li><a href="{{ routes.account_login_url }}">Sign in</a></li>
+        <li><a href="{{ routes.account_register_url }}">Create account</a></li>
+      {%- endif -%}
+    {%- endif -%}
+    <li><a href="{{ routes.search_url }}">Search</a></li>
+  </ul>
+</aside>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Extra menu", "default": "main-menu" },
+    { "type": "text", "id": "new_arrivals_collection_name", "label": "New Arrivals collection name", "default": "New Arrival" },
+    { "type": "text", "id": "homepage_collection_name", "label": "Homepage collection name", "default": "Home Page" },
+    { "type": "page", "id": "about_page", "label": "About page" }
+  ]
+}
+{% endschema %}

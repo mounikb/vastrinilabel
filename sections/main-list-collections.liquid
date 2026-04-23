@@ -1,0 +1,22 @@
+<div class="page-width section">
+  <div class="section-heading"><h1>Collections</h1></div>
+  <div class="cgrid">
+    {%- for coll in collections -%}
+      {%- if coll.handle != 'frontpage' and coll.handle != 'all' -%}
+        <a href="{{ coll.url }}" class="cgrid__item">
+          {%- assign img = coll.image | default: coll.products.first.featured_image -%}
+          {%- if img -%}
+            <img src="{{ img | image_url: width: 800 }}" alt="{{ coll.title | escape }}" loading="lazy" width="800" height="1000">
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'placeholder' }}
+          {%- endif -%}
+          <div class="cgrid__label">{{ coll.title }}<small>{{ coll.products_count }} products</small></div>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{ "name": "List collections", "settings": [] }
+{% endschema %}

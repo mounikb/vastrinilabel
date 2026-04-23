@@ -1,0 +1,19 @@
+<div class="rich-page">
+  <h1>{{ page.title }}</h1>
+  {%- if page.content != blank -%}<div class="rich-content">{{ page.content }}</div>{%- endif -%}
+
+  {%- form 'contact', class: 'newsletter-form', style: 'display:flex;flex-direction:column;gap:14px;margin-top:24px' -%}
+    {%- if form.posted_successfully? -%}
+      <p style="background:#eef7ee;padding:14px;border-radius:var(--radius)">Thanks! We'll get back to you shortly.</p>
+    {%- endif -%}
+    <input type="text" name="contact[name]" placeholder="Name" required style="padding:12px 16px;border:1px solid var(--color-border);border-radius:var(--radius)">
+    <input type="email" name="contact[email]" placeholder="Email" required style="padding:12px 16px;border:1px solid var(--color-border);border-radius:var(--radius)">
+    <input type="text" name="contact[subject]" placeholder="Subject" style="padding:12px 16px;border:1px solid var(--color-border);border-radius:var(--radius)">
+    <textarea name="contact[body]" placeholder="Message" rows="5" required style="padding:12px 16px;border:1px solid var(--color-border);border-radius:var(--radius);font-family:inherit"></textarea>
+    <button type="submit" class="btn btn--primary">Send message</button>
+  {%- endform -%}
+</div>
+
+{% schema %}
+{ "name": "Contact", "settings": [] }
+{% endschema %}

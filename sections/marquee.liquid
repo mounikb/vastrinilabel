@@ -1,0 +1,34 @@
+<div class="marquee">
+  <div class="marquee__track">
+    {%- for i in (1..2) -%}
+      {%- for block in section.blocks -%}
+        <span>{{ block.settings.text }}</span>
+        <span>&bull;</span>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee",
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "New season edits just landed" }]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee",
+      "blocks": [
+        { "type": "item", "settings": { "text": "New season edits just landed" } },
+        { "type": "item", "settings": { "text": "Easy 7-day returns" } },
+        { "type": "item", "settings": { "text": "Secure checkout" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

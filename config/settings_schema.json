@@ -1,0 +1,55 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Berrylush Bloom",
+    "theme_version": "1.0.0",
+    "theme_author": "Lovable",
+    "theme_documentation_url": "https://lovable.dev",
+    "theme_support_url": "https://lovable.dev"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "header", "content": "Brand" },
+      { "type": "color", "id": "color_background", "label": "Background", "default": "#FBF7F4" },
+      { "type": "color", "id": "color_surface", "label": "Surface (cards)", "default": "#FFFFFF" },
+      { "type": "color", "id": "color_text", "label": "Body text", "default": "#1B1B1B" },
+      { "type": "color", "id": "color_muted", "label": "Muted text", "default": "#7A6F6A" },
+      { "type": "color", "id": "color_primary", "label": "Primary (brand)", "default": "#7A1F3D" },
+      { "type": "color", "id": "color_primary_contrast", "label": "Primary contrast", "default": "#FFFFFF" },
+      { "type": "color", "id": "color_accent", "label": "Accent", "default": "#E8A6B8" },
+      { "type": "color", "id": "color_border", "label": "Border", "default": "#E8E1DC" },
+      { "type": "color", "id": "color_sale", "label": "Sale", "default": "#B5263A" }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      { "type": "font_picker", "id": "font_heading", "label": "Heading font", "default": "playfair_display_n7" },
+      { "type": "font_picker", "id": "font_body", "label": "Body font", "default": "inter_n4" },
+      { "type": "range", "id": "font_heading_scale", "label": "Heading scale", "min": 90, "max": 130, "step": 5, "unit": "%", "default": 100 }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      { "type": "range", "id": "page_width", "label": "Page width", "min": 1200, "max": 1600, "step": 20, "unit": "px", "default": 1400 },
+      { "type": "range", "id": "border_radius", "label": "Corner radius", "min": 0, "max": 24, "step": 1, "unit": "px", "default": 4 }
+    ]
+  },
+  {
+    "name": "Social",
+    "settings": [
+      { "type": "text", "id": "social_instagram_link", "label": "Instagram URL" },
+      { "type": "text", "id": "social_facebook_link", "label": "Facebook URL" },
+      { "type": "text", "id": "social_pinterest_link", "label": "Pinterest URL" },
+      { "type": "text", "id": "social_youtube_link", "label": "YouTube URL" }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      { "type": "image_picker", "id": "favicon", "label": "Favicon" }
+    ]
+  }
+]

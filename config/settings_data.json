@@ -1,0 +1,29 @@
+{
+  "current": {
+    "color_background": "#FBF7F4",
+    "color_surface": "#FFFFFF",
+    "color_text": "#1B1B1B",
+    "color_muted": "#7A6F6A",
+    "color_primary": "#7A1F3D",
+    "color_primary_contrast": "#FFFFFF",
+    "color_accent": "#E8A6B8",
+    "color_border": "#E8E1DC",
+    "color_sale": "#B5263A",
+    "font_heading": "playfair_display_n7",
+    "font_body": "inter_n4",
+    "font_heading_scale": 100,
+    "page_width": 1400,
+    "border_radius": 4,
+    "social_instagram_link": "",
+    "social_facebook_link": "",
+    "social_pinterest_link": "",
+    "social_youtube_link": ""
+  },
+  "presets": {
+    "Berrylush Bloom": {
+      "color_background": "#FBF7F4",
+      "color_primary": "#7A1F3D",
+      "color_accent": "#E8A6B8"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-slideshow",
+      "blocks": {
+        "s1": {
+          "type": "slide",
+          "settings": {
+            "alt": "Editorial hero slide one",
+            "link": "/collections/all"
+          }
+        },
+        "s2": {
+          "type": "slide",
+          "settings": {
+            "alt": "Editorial hero slide two",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": ["s1", "s2"]
+    },
+    "marquee": {
+      "type": "marquee",
+      "blocks": {
+        "m1": { "type": "item", "settings": { "text": "New season edits just landed" } },
+        "m2": { "type": "item", "settings": { "text": "Easy 7-day returns" } },
+        "m3": { "type": "item", "settings": { "text": "Secure checkout" } },
+        "m4": { "type": "item", "settings": { "text": "New arrivals every week" } }
+      },
+      "block_order": ["m1", "m2", "m3", "m4"]
+    },
+    "lookbook": {
+      "type": "lookbook-grid",
+      "blocks": {
+        "t1": { "type": "tile", "settings": { "subtext": "Shop now" } },
+        "t2": { "type": "tile", "settings": { "subtext": "Shop now" } },
+        "t3": { "type": "tile", "settings": { "subtext": "Shop now" } }
+      },
+      "block_order": ["t1", "t2", "t3"]
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Bestsellers",
+        "heading": "Loved by you",
+        "collection_name": "Home Page",
+        "collection": "frontpage",
+        "product_count": 8,
+        "show_view_all": true
+      }
+    },
+    "iwt": {
+      "type": "image-with-text",
+      "settings": {
+        "eyebrow": "Our story",
+        "heading": "Crafted for the modern woman",
+        "body": "<p>Pieces designed to move with you - from sunrise meetings to sunset dinners. Every look is born from a love of detail and an obsession with fit.</p>",
+        "button_text": "About us",
+        "button_link": "/pages/about"
+      }
+    },
+    "new-in": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Just dropped",
+        "heading": "New this week",
+        "collection_name": "Home Page",
+        "collection": "frontpage",
+        "product_count": 4,
+        "show_view_all": true
+      }
+    },
+    "testimonials": {
+      "type": "testimonials"
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": ["hero", "marquee", "lookbook", "featured", "iwt", "new-in", "testimonials", "newsletter"]
+}

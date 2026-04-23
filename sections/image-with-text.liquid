@@ -1,0 +1,36 @@
+<section class="section--sm" style="background:{{ section.settings.bg_color }}">
+  <div class="iwt {% if section.settings.reverse %}iwt--reverse{% endif %}">
+    <div class="iwt__media">
+      {%- if section.settings.image != blank -%}
+        <img src="{{ section.settings.image | image_url: width: 1200 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1200" height="1200">
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
+      {%- endif -%}
+    </div>
+    <div class="iwt__content">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+      <div>{{ section.settings.body }}</div>
+      {%- if section.settings.button_text != blank -%}
+        <p style="margin-top:24px"><a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a></p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our story" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Crafted for the modern woman" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Pieces designed to move with you - from sunrise meetings to sunset dinners. Every Berrylush look is born from a love of detail and an obsession with fit.</p>" },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Discover more" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "checkbox", "id": "reverse", "label": "Reverse order", "default": false },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#FBF7F4" }
+  ],
+  "presets": [{ "name": "Image with text" }]
+}
+{% endschema %}

@@ -1,0 +1,40 @@
+{%- comment -%} Cart drawer (rendered globally via theme.liquid) {%- endcomment -%}
+<div class="cart-drawer" id="CartDrawer" aria-hidden="true">
+  <div class="cart-drawer__head">
+    <h3>{{ 'cart.general.title' | t }}</h3>
+    <button data-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'icon', icon: 'close' %}</button>
+  </div>
+  {%- if cart.item_count > 0 -%}
+    <div class="cart-drawer__items">
+      {%- for item in cart.items -%}
+        <div class="cart-drawer__row">
+          <a href="{{ item.url }}">
+            {%- if item.image -%}
+              <img src="{{ item.image | image_url: width: 140 }}" alt="{{ item.product.title | escape }}" width="70" height="93" loading="lazy">
+            {%- endif -%}
+          </a>
+          <div>
+            <a href="{{ item.url }}"><strong>{{ item.product.title }}</strong></a>
+            {%- unless item.product.has_only_default_variant -%}
+              <div style="color:var(--color-muted);font-size:.78rem">{{ item.variant.title }}</div>
+            {%- endunless -%}
+            <div style="margin-top:6px">{{ item.final_price | money }} x {{ item.quantity }}</div>
+            <a href="#" data-cart-remove="{{ item.key }}" style="font-size:.75rem;color:var(--color-muted);text-decoration:underline">{{ 'cart.general.remove' | t }}</a>
+          </div>
+          <div>{{ item.final_line_price | money }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="cart-drawer__foot">
+      <div class="row"><span>{{ 'cart.general.subtotal' | t }}</span><span>{{ cart.total_price | money }}</span></div>
+      <p style="font-size:.78rem;color:var(--color-muted);margin:0 0 14px">{{ 'cart.general.shipping_at_checkout' | t }}</p>
+      <a href="/cart" class="btn btn--secondary btn--block" style="margin-bottom:8px">{{ 'cart.general.view' | t }}</a>
+      <a href="/checkout" class="btn btn--primary btn--block">{{ 'cart.general.checkout' | t }}</a>
+    </div>
+  {%- else -%}
+    <div class="cart-empty" style="padding:32px 0">
+      <p>{{ 'cart.general.empty' | t }}</p>
+      <a href="/collections/all" class="btn btn--primary">{{ 'cart.general.continue_shopping' | t }}</a>
+    </div>
+  {%- endif -%}
+</div>

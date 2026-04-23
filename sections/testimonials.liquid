@@ -1,0 +1,59 @@
+<section class="section">
+  <div class="page-width">
+    <div class="section-heading">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+    <div class="tst">
+      {%- for block in section.blocks -%}
+        <div class="tst__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <img
+              class="tst__image"
+              src="{{ block.settings.image | image_url: width: 240 }}"
+              alt="{{ block.settings.author | escape }}"
+              loading="lazy"
+              width="120"
+              height="120"
+            >
+          {%- endif -%}
+          <div class="tst__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="tst__text">"{{ block.settings.quote }}"</p>
+          <div class="tst__author">{{ block.settings.author }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Loved by thousands" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What our customers say" }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Card image" },
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "The quality is gorgeous and the fit is everything I hoped for." },
+        { "type": "text", "id": "author", "label": "Author", "default": "Verified buyer" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial", "settings": { "quote": "Soft fabrics, beautiful prints, and they actually fit. Obsessed.", "author": "Priya S." } },
+        { "type": "testimonial", "settings": { "quote": "I've reordered four times now. Their dresses are unmatched.", "author": "Anika R." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,33 @@
+<article class="article">
+  <h1>{{ article.title }}</h1>
+  <div class="article__meta">{{ article.published_at | date: "%B %d, %Y" }}{% if article.author %} · {{ 'blogs.article.by_author' | t: author: article.author }}{% endif %}</div>
+  {%- if article.image -%}
+    <div class="article__featured"><img src="{{ article.image | image_url: width: 1600 }}" alt="{{ article.title | escape }}" width="1600" height="900"></div>
+  {%- endif -%}
+  <div class="article__content">{{ article.content }}</div>
+
+  {%- if blog.comments_enabled? -%}
+    <section style="margin-top:48px">
+      <h3>Comments</h3>
+      {%- for comment in article.comments -%}
+        <div style="padding:16px 0;border-bottom:1px solid var(--color-border)">
+          <strong>{{ comment.author }}</strong>
+          <div style="font-size:.8rem;color:var(--color-muted);margin-bottom:8px">{{ comment.created_at | date: "%B %d, %Y" }}</div>
+          <div>{{ comment.content }}</div>
+        </div>
+      {%- endfor -%}
+
+      {%- form 'new_comment', article, style: 'margin-top:24px;display:flex;flex-direction:column;gap:12px' -%}
+        {%- if form.posted_successfully? -%}<p>Thanks for your comment.</p>{%- endif -%}
+        <input type="text" name="comment[author]" placeholder="Name" required style="padding:12px;border:1px solid var(--color-border);border-radius:var(--radius)">
+        <input type="email" name="comment[email]" placeholder="Email" required style="padding:12px;border:1px solid var(--color-border);border-radius:var(--radius)">
+        <textarea name="comment[body]" placeholder="Your comment" rows="4" required style="padding:12px;border:1px solid var(--color-border);border-radius:var(--radius);font-family:inherit"></textarea>
+        <button type="submit" class="btn btn--primary" style="align-self:start">Post comment</button>
+      {%- endform -%}
+    </section>
+  {%- endif -%}
+</article>
+
+{% schema %}
+{ "name": "Article", "settings": [] }
+{% endschema %}

@@ -1,0 +1,22 @@
+<div class="page-width section">
+  <div class="section-heading"><h1>{{ blog.title }}</h1></div>
+
+  {%- paginate blog.articles by 9 -%}
+    <div class="blog-grid">
+      {%- for article in blog.articles -%}
+        <a href="{{ article.url }}" class="blog-card">
+          {%- if article.image -%}
+            <img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title | escape }}" loading="lazy" width="800" height="600">
+          {%- endif -%}
+          <h3>{{ article.title }}</h3>
+          <p>{{ article.excerpt_or_content | strip_html | truncatewords: 18 }}</p>
+        </a>
+      {%- endfor -%}
+    </div>
+    {% render 'pagination', paginate: paginate %}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{ "name": "Blog", "settings": [] }
+{% endschema %}

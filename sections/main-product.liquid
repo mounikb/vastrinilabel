@@ -1,0 +1,101 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+<div class="page-width">
+  <div class="product">
+    <div class="product__media" data-gallery>
+      {%- if product.images.size > 0 -%}
+        <img data-gallery-main src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" width="1200" height="1600">
+        {%- if product.images.size > 1 -%}
+          <div class="product__thumbs">
+            {%- for img in product.images limit: 6 -%}
+              <button type="button" data-gallery-thumb data-src="{{ img | image_url: width: 1200 }}" {% if forloop.first %}class="is-active"{% endif %} aria-label="Image {{ forloop.index }}">
+                <img src="{{ img | image_url: width: 200 }}" alt="" width="100" height="100" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+      {%- endif -%}
+    </div>
+
+    <div class="product__info">
+      {%- if product.vendor != blank -%}<div class="product__vendor">{{ product.vendor }}</div>{%- endif -%}
+      <h1 class="product__title">{{ product.title }}</h1>
+      <div class="product__price">
+        <span data-product-price>{{ current_variant.price | money }}</span>
+        {%- if product.compare_at_price > product.price -%}
+          <span class="price--compare">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- form 'product', product, data-product-form: '', data-ajax: 'true', data-variants: product.variants | json | escape -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="product__option">
+              <label class="product__option-label">{{ option.name }}</label>
+              <div class="swatch-list">
+                {%- for value in option.values -%}
+                  {%- assign input_id = 'opt-' | append: forloop.index0 | append: '-' | append: forloop.index -%}
+                  <span>
+                    <input type="radio" id="{{ input_id }}" name="options[{{ option.name }}]" value="{{ value | escape }}" data-option-input {% if option.selected_value == value %}checked{% endif %}>
+                    <label for="{{ input_id }}">{{ value }}</label>
+                  </span>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <div class="qty-row">
+          <label class="product__option-label" style="margin:0">{{ 'products.product.quantity' | t }}</label>
+          <div class="qty" data-qty>
+            <button type="button" data-qty-minus aria-label="Decrease">-</button>
+            <input type="number" name="quantity" value="1" min="1" inputmode="numeric">
+            <button type="button" data-qty-plus aria-label="Increase">+</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--block btn--lg" data-add-text="{{ 'products.product.add_to_cart' | t }}" data-sold-text="{{ 'products.product.sold_out' | t }}" {% unless current_variant.available %}disabled{% endunless %}>
+          {%- if current_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+        </button>
+      {%- endform -%}
+
+      {%- if product.description != blank -%}
+        <div class="product__desc">{{ product.description }}</div>
+      {%- endif -%}
+
+      <div class="product__meta">
+        {%- if product.sku != blank -%}<div>{{ 'products.product.sku' | t }}: {{ product.sku }}</div>{%- endif -%}
+        {%- if product.type != blank -%}<div>Type: {{ product.type }}</div>{%- endif -%}
+      </div>
+
+      <div class="product__share">
+        <span>Share</span>
+        <a href="https://www.facebook.com/sharer.php?u={{ shop.url }}{{ product.url }}" target="_blank" rel="noopener" aria-label="Share on Facebook">{% render 'icon', icon: 'facebook' %}</a>
+        <a href="https://pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&media={{ product.featured_image | image_url: width: 1200 }}&description={{ product.title | escape }}" target="_blank" rel="noopener" aria-label="Share on Pinterest">{% render 'icon', icon: 'pinterest' %}</a>
+      </div>
+    </div>
+  </div>
+
+  {%- if recommendations.products_count > 0 or recommendations.performed? == false -%}
+    <section class="section">
+      <div class="section-heading"><h2>You may also like</h2></div>
+      <div class="product-grid">
+        {%- for p in recommendations.products limit: 4 -%}
+          {% render 'product-card', product: p %}
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": []
+}
+{% endschema %}

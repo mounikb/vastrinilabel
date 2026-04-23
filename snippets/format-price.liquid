@@ -1,0 +1,5 @@
+{%- comment -%} Money formatting helper {%- endcomment -%}
+{%- liquid
+  assign price = price | default: 0
+-%}
+{{ price | money }}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="{{ settings.color_primary }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- capture seo_title -%}
+      {{ page_title }}
+      {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    {%- endcapture -%}
+    <title>{{ seo_title | strip }}</title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'social-meta-tags' %}
+
+    <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+
+    {{ content_for_header }}
+
+    {%- liquid
+      assign body_font = settings.font_body
+      assign heading_font = settings.font_heading
+    -%}
+
+    <style>
+      {{ body_font | font_face: font_display: 'swap' }}
+      {{ heading_font | font_face: font_display: 'swap' }}
+
+      :root {
+        --color-bg: {{ settings.color_background }};
+        --color-surface: {{ settings.color_surface }};
+        --color-text: {{ settings.color_text }};
+        --color-muted: {{ settings.color_muted }};
+        --color-primary: {{ settings.color_primary }};
+        --color-primary-contrast: {{ settings.color_primary_contrast }};
+        --color-accent: {{ settings.color_accent }};
+        --color-border: {{ settings.color_border }};
+        --color-sale: {{ settings.color_sale }};
+        --font-heading: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+        --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+        --font-heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
+        --page-width: {{ settings.page_width }}px;
+        --radius: {{ settings.border_radius }}px;
+      }
+    </style>
+
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+  </head>
+
+  <body class="template-{{ template | replace: '.', '-' | handle }}">
+    <a class="skip-to-content" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" role="main">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% render 'cart-drawer' %}
+  </body>
+</html>

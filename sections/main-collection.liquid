@@ -1,0 +1,38 @@
+<div class="collection-banner">
+  <h1>{{ collection.title }}</h1>
+  {%- if collection.description != blank -%}<p>{{ collection.description | strip_html | truncatewords: 30 }}</p>{%- endif -%}
+</div>
+
+<div class="page-width">
+  <div class="collection-toolbar">
+    <span>{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
+    <form>
+      <label for="SortBy" style="margin-right:8px">{{ 'collections.general.sort_by' | t }}</label>
+      <select name="sort_by" id="SortBy" onchange="this.form.submit()">
+        {%- assign sort_options = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending' | split: ',' -%}
+        {%- for opt in sort_options -%}
+          <option value="{{ opt }}" {% if collection.sort_by == opt or collection.default_sort_by == opt and collection.sort_by == blank %}selected{% endif %}>
+            {{ opt | replace: '-', '_' | prepend: 'collections.sorting.' | t }}
+          </option>
+        {%- endfor -%}
+      </select>
+    </form>
+  </div>
+
+  {%- paginate collection.products by 24 -%}
+    {%- if collection.products.size > 0 -%}
+      <div class="product-grid">
+        {%- for product in collection.products -%}
+          {% render 'product-card', product: product, show_quick: true %}
+        {%- endfor -%}
+      </div>
+      {% render 'pagination', paginate: paginate %}
+    {%- else -%}
+      <p style="text-align:center;padding:60px 0">{{ 'collections.general.no_matches' | t }}</p>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{ "name": "Collection", "settings": [] }
+{% endschema %}
