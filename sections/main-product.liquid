@@ -1,5 +1,9 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
+  assign requires_login = false
+  if shop.customer_accounts_enabled and customer == blank
+    assign requires_login = true
+  endif
 -%}
 <div class="page-width">
   <div class="product">
@@ -30,23 +34,30 @@
         {%- endif -%}
       </div>
 
-      {%- form 'product', product, data-product-form: '', data-ajax: 'true', data-variants: product.variants | json | escape -%}
+      <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" data-product-form data-ajax="true" data-variants="{{ product.variants | json | escape }}">
         <input type="hidden" name="id" value="{{ current_variant.id }}">
 
         {%- unless product.has_only_default_variant -%}
           {%- for option in product.options_with_values -%}
-            <div class="product__option">
-              <label class="product__option-label">{{ option.name }}</label>
-              <div class="swatch-list">
+            {%- assign option_name = option.name | downcase -%}
+            <fieldset class="product__option">
+              <legend class="product__option-label">{{ option.name }}</legend>
+              <div class="swatch-list {% if option_name contains 'color' or option_name contains 'colour' %}swatch-list--color{% endif %}">
                 {%- for value in option.values -%}
-                  {%- assign input_id = 'opt-' | append: forloop.index0 | append: '-' | append: forloop.index -%}
+                  {%- assign input_id = 'opt-' | append: option.position | append: '-' | append: forloop.index -%}
+                  {%- assign value_key = value | handle -%}
                   <span>
                     <input type="radio" id="{{ input_id }}" name="options[{{ option.name }}]" value="{{ value | escape }}" data-option-input {% if option.selected_value == value %}checked{% endif %}>
-                    <label for="{{ input_id }}">{{ value }}</label>
+                    <label for="{{ input_id }}" {% if option_name contains 'color' or option_name contains 'colour' %}style="--swatch-color: {{ value_key | replace: '-', ' ' }}"{% endif %}>
+                      {%- if option_name contains 'color' or option_name contains 'colour' -%}
+                        <span class="swatch-dot" aria-hidden="true"></span>
+                      {%- endif -%}
+                      {{ value }}
+                    </label>
                   </span>
                 {%- endfor -%}
               </div>
-            </div>
+            </fieldset>
           {%- endfor -%}
         {%- endunless -%}
 
@@ -59,10 +70,18 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn--primary btn--block btn--lg" data-add-text="{{ 'products.product.add_to_cart' | t }}" data-sold-text="{{ 'products.product.sold_out' | t }}" {% unless current_variant.available %}disabled{% endunless %}>
-          {%- if current_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
-        </button>
-      {%- endform -%}
+        {%- if requires_login -%}
+          <div class="product__login-prompt">
+            <strong>Sign in to add this item to your cart.</strong>
+            <span>Your profile, cart and checkout will stay connected after login.</span>
+            <a href="{{ routes.account_login_url }}?return_url={{ product.url | url_encode }}" class="btn btn--primary btn--block btn--lg">Sign in to shop</a>
+          </div>
+        {%- else -%}
+          <button type="submit" class="btn btn--primary btn--block btn--lg" data-add-text="{{ 'products.product.add_to_cart' | t }}" data-sold-text="{{ 'products.product.sold_out' | t }}" {% unless current_variant.available %}disabled{% endunless %}>
+            {%- if current_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+          </button>
+        {%- endif -%}
+      </form>
 
       {%- if product.description != blank -%}
         <div class="product__desc">{{ product.description }}</div>

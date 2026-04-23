@@ -14,6 +14,7 @@
   assign homepage_key = section.settings.homepage_collection_name | strip | downcase
   assign new_arrivals_collection = blank
   assign homepage_collection = blank
+  assign new_arrivals_url = routes.collections_url
 
   for coll in collections
     assign coll_title_key = coll.title | strip | downcase
@@ -29,6 +30,12 @@
       endif
     endif
   endfor
+  if new_arrivals_collection != blank
+    assign new_arrivals_url = new_arrivals_collection.url
+  elsif new_arrivals_key != blank
+    assign new_arrivals_tag = new_arrivals_key | handle
+    assign new_arrivals_url = routes.all_products_collection_url | append: '/' | append: new_arrivals_tag
+  endif
 -%}
 
 <header class="site-header">
@@ -49,11 +56,11 @@
       <nav class="site-header__nav" aria-label="Primary">
         <a href="{{ routes.root_url }}" class="site-header__nav-link">Home</a>
 
-        <div class="site-header__nav-item site-header__nav-item--dropdown">
-          <a href="{{ routes.collections_url }}" class="site-header__nav-link">
+        <div class="site-header__nav-item site-header__nav-item--dropdown" data-dropdown>
+          <button type="button" class="site-header__nav-link" data-dropdown-toggle aria-expanded="false">
             <span>Catalog</span>
             {% render 'icon', icon: 'chevron-down' %}
-          </a>
+          </button>
           <div class="site-header__dropdown">
             <a href="{{ routes.all_products_collection_url }}" class="site-header__dropdown-link">All Products</a>
             {%- for coll in collections -%}
@@ -66,18 +73,18 @@
           </div>
         </div>
 
-        <a href="{{ new_arrivals_collection.url | default: routes.collections_url }}" class="site-header__nav-link">New Arrivals</a>
+        <a href="{{ new_arrivals_url }}" class="site-header__nav-link">New Arrivals</a>
         <a href="{{ section.settings.about_page | default: '/pages/about' }}" class="site-header__nav-link">About Us</a>
 
         {%- for link in section.settings.menu.links -%}
           {%- assign link_title_key = link.title | strip | downcase -%}
           {%- unless link_title_key == 'home' or link_title_key == 'catalog' or link_title_key == 'new arrivals' or link_title_key == 'about us' -%}
             {%- if link.links != blank -%}
-              <div class="site-header__nav-item site-header__nav-item--dropdown">
-                <a href="{{ link.url }}" class="site-header__nav-link">
+              <div class="site-header__nav-item site-header__nav-item--dropdown" data-dropdown>
+                <button type="button" class="site-header__nav-link" data-dropdown-toggle aria-expanded="false">
                   <span>{{ link.title }}</span>
                   {% render 'icon', icon: 'chevron-down' %}
-                </a>
+                </button>
                 <div class="site-header__dropdown">
                   {%- for child_link in link.links -%}
                     <a href="{{ child_link.url }}" class="site-header__dropdown-link">{{ child_link.title }}</a>
@@ -140,7 +147,7 @@
         </div>
       </details>
     </li>
-    <li><a href="{{ new_arrivals_collection.url | default: routes.collections_url }}">New Arrivals</a></li>
+    <li><a href="{{ new_arrivals_url }}">New Arrivals</a></li>
     <li><a href="{{ section.settings.about_page | default: '/pages/about' }}">About Us</a></li>
     {%- for link in section.settings.menu.links -%}
       {%- assign link_title_key = link.title | strip | downcase -%}
@@ -180,7 +187,7 @@
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo" },
     { "type": "link_list", "id": "menu", "label": "Extra menu", "default": "main-menu" },
-    { "type": "text", "id": "new_arrivals_collection_name", "label": "New Arrivals collection name", "default": "New Arrival" },
+    { "type": "text", "id": "new_arrivals_collection_name", "label": "New Arrivals collection name", "default": "New" },
     { "type": "text", "id": "homepage_collection_name", "label": "Homepage collection name", "default": "Home Page" },
     { "type": "page", "id": "about_page", "label": "About page" }
   ]

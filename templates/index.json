@@ -65,8 +65,9 @@
       "settings": {
         "eyebrow": "Just dropped",
         "heading": "New this week",
-        "collection_name": "Home Page",
-        "collection": "frontpage",
+        "collection_name": "all",
+        "filter_tag": "new",
+        "collection": "all",
         "product_count": 4,
         "show_view_all": true
       }

@@ -7,8 +7,11 @@
     {%- liquid
       assign coll = blank
       assign collection_name_key = section.settings.collection_name | strip | downcase
+      assign filter_tag_key = section.settings.filter_tag | strip | downcase
 
-      if collection_name_key != blank
+      if collection_name_key == 'all'
+        assign coll = collections.all
+      elsif collection_name_key != blank
         for candidate in collections
           assign candidate_title_key = candidate.title | strip | downcase
           assign candidate_handle_key = candidate.handle | strip | downcase
@@ -28,21 +31,45 @@
       if coll == blank or coll.empty?
         assign coll = collections.all
       endif
+      assign rendered_count = 0
+      assign view_all_url = coll.url
+      if filter_tag_key != blank
+        assign filter_tag_handle = filter_tag_key | handle
+        assign view_all_url = coll.url | append: '/' | append: filter_tag_handle
+      endif
     -%}
     <div class="product-grid">
       {%- if coll.products.size > 0 -%}
-        {%- for product in coll.products limit: section.settings.product_count -%}
-          {% render 'product-card', product: product, show_quick: true %}
+        {%- for product in coll.products -%}
+          {%- liquid
+            assign show_product = true
+            if filter_tag_key != blank
+              assign show_product = false
+              for tag in product.tags
+                assign tag_key = tag | strip | downcase
+                if tag_key == filter_tag_key
+                  assign show_product = true
+                  break
+                endif
+              endfor
+            endif
+          -%}
+          {%- if show_product and rendered_count < section.settings.product_count -%}
+            {% render 'product-card', product: product, show_quick: true %}
+            {%- assign rendered_count = rendered_count | plus: 1 -%}
+          {%- endif -%}
         {%- endfor -%}
-      {%- else -%}
+      {%- endif -%}
+
+      {%- if rendered_count == 0 -%}
         <p style="grid-column:1/-1;text-align:center;color:var(--color-muted);padding:40px 0">
-          No products yet. Add products in Shopify admin and they'll appear here automatically.
+          No matching products yet. Add products to this collection and tag them in Shopify admin.
         </p>
       {%- endif -%}
     </div>
-    {%- if section.settings.show_view_all and coll != blank and coll.products.size > 0 -%}
+    {%- if section.settings.show_view_all and coll != blank and rendered_count > 0 -%}
       <div class="text-center mt-8">
-        <a href="{{ coll.url }}" class="btn btn--secondary">{{ 'collections.general.view_all' | t }}</a>
+        <a href="{{ view_all_url }}" class="btn btn--secondary">{{ 'collections.general.view_all' | t }}</a>
       </div>
     {%- endif -%}
   </div>
@@ -55,6 +82,7 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Bestsellers" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Loved by you" },
     { "type": "text", "id": "collection_name", "label": "Collection name (case-insensitive)", "default": "Home Page" },
+    { "type": "text", "id": "filter_tag", "label": "Optional product tag filter (case-insensitive)" },
     { "type": "collection", "id": "collection", "label": "Fallback collection" },
     { "type": "range", "id": "product_count", "label": "Products to show", "min": 4, "max": 12, "step": 1, "default": 8 },
     { "type": "checkbox", "id": "show_view_all", "label": "Show \"View all\" button", "default": true }

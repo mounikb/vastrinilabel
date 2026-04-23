@@ -1,4 +1,5 @@
 <div class="collection-banner">
+  <span class="collection-banner__eyebrow">Collection</span>
   <h1>{{ collection.title }}</h1>
   {%- if collection.description != blank -%}<p>{{ collection.description | strip_html | truncatewords: 30 }}</p>{%- endif -%}
 </div>
