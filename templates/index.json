@@ -138,10 +138,10 @@
       "settings": {
         "eyebrow": "Just dropped",
         "heading": "New this week",
-        "collection_name": "all",
+        "collection_name": "new",
         "filter_tag": "",
         "collection": "all",
-        "product_count": 4,
+        "product_count": 5,
         "show_view_all": true
       }
     },
