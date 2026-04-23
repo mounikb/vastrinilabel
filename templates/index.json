@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -6,6 +15,7 @@
         "s1": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-04-23_113722.png",
             "alt": "Editorial hero slide one",
             "link": "/collections/all"
           }
@@ -13,31 +23,91 @@
         "s2": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-04-21_062335.png",
             "alt": "Editorial hero slide two",
             "link": "/collections/all"
           }
         }
       },
-      "block_order": ["s1", "s2"]
+      "block_order": [
+        "s1",
+        "s2"
+      ],
+      "settings": {}
     },
     "marquee": {
       "type": "marquee",
       "blocks": {
-        "m1": { "type": "item", "settings": { "text": "New season edits just landed" } },
-        "m2": { "type": "item", "settings": { "text": "Easy 7-day returns" } },
-        "m3": { "type": "item", "settings": { "text": "Secure checkout" } },
-        "m4": { "type": "item", "settings": { "text": "New arrivals every week" } }
+        "m1": {
+          "type": "item",
+          "settings": {
+            "text": "New season edits just landed"
+          }
+        },
+        "m2": {
+          "type": "item",
+          "settings": {
+            "text": "Easy 7-day returns"
+          }
+        },
+        "m3": {
+          "type": "item",
+          "settings": {
+            "text": "Secure checkout"
+          }
+        },
+        "m4": {
+          "type": "item",
+          "settings": {
+            "text": "New arrivals every week"
+          }
+        }
       },
-      "block_order": ["m1", "m2", "m3", "m4"]
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4"
+      ],
+      "settings": {}
     },
     "lookbook": {
       "type": "lookbook-grid",
       "blocks": {
-        "t1": { "type": "tile", "settings": { "subtext": "Shop now" } },
-        "t2": { "type": "tile", "settings": { "subtext": "Shop now" } },
-        "t3": { "type": "tile", "settings": { "subtext": "Shop now" } }
+        "t1": {
+          "type": "tile",
+          "settings": {
+            "collection": "accessory",
+            "label": "",
+            "subtext": "Shop now"
+          }
+        },
+        "t2": {
+          "type": "tile",
+          "settings": {
+            "collection": "party-gowns",
+            "label": "",
+            "subtext": "Shop now"
+          }
+        },
+        "t3": {
+          "type": "tile",
+          "settings": {
+            "collection": "handbags",
+            "label": "",
+            "subtext": "Shop now"
+          }
+        }
       },
-      "block_order": ["t1", "t2", "t3"]
+      "block_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "settings": {
+        "eyebrow": "Shop by edit",
+        "heading": "Curated collections"
+      }
     },
     "featured": {
       "type": "featured-collection",
@@ -45,6 +115,7 @@
         "eyebrow": "Bestsellers",
         "heading": "Loved by you",
         "collection_name": "Home Page",
+        "filter_tag": "",
         "collection": "frontpage",
         "product_count": 8,
         "show_view_all": true
@@ -57,7 +128,9 @@
         "heading": "Crafted for the modern woman",
         "body": "<p>Pieces designed to move with you - from sunrise meetings to sunset dinners. Every look is born from a love of detail and an obsession with fit.</p>",
         "button_text": "About us",
-        "button_link": "/pages/about"
+        "button_link": "/pages/about",
+        "reverse": false,
+        "bg_color": "#fbf7f4"
       }
     },
     "new-in": {
@@ -66,18 +139,36 @@
         "eyebrow": "Just dropped",
         "heading": "New this week",
         "collection_name": "all",
-        "filter_tag": "new",
+        "filter_tag": "",
         "collection": "all",
         "product_count": 4,
         "show_view_all": true
       }
     },
     "testimonials": {
-      "type": "testimonials"
+      "type": "testimonials",
+      "settings": {
+        "eyebrow": "Loved by thousands",
+        "heading": "What our customers say"
+      }
     },
     "newsletter": {
-      "type": "newsletter"
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "Join the club",
+        "heading": "Get 10% off your first order",
+        "body": "Sign up for first access to new drops, edits, and members-only sales."
+      }
     }
   },
-  "order": ["hero", "marquee", "lookbook", "featured", "iwt", "new-in", "testimonials", "newsletter"]
+  "order": [
+    "hero",
+    "marquee",
+    "lookbook",
+    "featured",
+    "iwt",
+    "new-in",
+    "testimonials",
+    "newsletter"
+  ]
 }
