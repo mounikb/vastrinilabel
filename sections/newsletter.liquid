@@ -6,7 +6,7 @@
           <img src="{{ section.settings.image | image_url: width: 1200 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1200" height="1200">
         {%- else -%}
           <div class="newsletter-banner__placeholder">
-            <span class="newsletter-banner__placeholder-badge">Vastrini Circle</span>
+            <span class="newsletter-banner__placeholder-badge">Private list</span>
             <img src="{{ 'vastrini-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" width="360" height="104">
           </div>
         {%- endif -%}
@@ -15,7 +15,7 @@
         {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
         <h2>{{ section.settings.heading }}</h2>
         <p>{{ section.settings.body }}</p>
-        <div class="newsletter-banner__tags">
+        <div class="newsletter-banner__notes">
           <span>Early drops</span>
           <span>Members-only offers</span>
           <span>Styling notes</span>
@@ -27,13 +27,10 @@
           {%- if form.posted_successfully? -%}<p class="newsletter-banner__confirmation">{{ 'general.newsletter_form.confirmation' | t }}</p>{%- endif -%}
         {%- endform -%}
         {%- if section.settings.cta_text != blank -%}
-          <a href="{{ section.settings.cta_link | default: '#' }}" class="newsletter-banner__secondary">
-            <span class="newsletter-banner__secondary-icon">{% render 'icon', icon: 'arrow-up-right' %}</span>
-            <span>
-              <strong>{{ section.settings.cta_text }}</strong>
-              <small>{{ section.settings.cta_caption }}</small>
-            </span>
-          </a>
+          <div class="newsletter-banner__subcopy">
+            <strong>{{ section.settings.cta_text }}</strong>
+            <small>{{ section.settings.cta_caption }}</small>
+          </div>
         {%- endif -%}
       </div>
     </div>

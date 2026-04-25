@@ -9,26 +9,27 @@
           <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a>
         {%- endif -%}
       </div>
-      <div class="features-banner__grid">
-        <article class="features-banner__card">
-          <span class="features-banner__icon">{% render 'icon', icon: 'diamond' %}</span>
-          <strong>100% Handpicked Quality</strong>
-          <p>Chosen for flattering fits, polished finishing, and wardrobe-ready ease.</p>
+      <div class="features-banner__rail" aria-label="Brand promises">
+        <article class="features-banner__point">
+          <span class="features-banner__index">01</span>
+          <div>
+            <strong>Curated quality</strong>
+            <p>Sharper edits, better finishing, and pieces selected for polish instead of volume.</p>
+          </div>
         </article>
-        <article class="features-banner__card">
-          <span class="features-banner__icon">{% render 'icon', icon: 'truck' %}</span>
-          <strong>2-5 Day Delivery</strong>
-          <p>Fast pan-India shipping with smooth tracking and careful packaging.</p>
+        <article class="features-banner__point">
+          <span class="features-banner__index">02</span>
+          <div>
+            <strong>Fast, clear delivery</strong>
+            <p>Reliable pan-India shipping with careful packing and fewer surprises after checkout.</p>
+          </div>
         </article>
-        <article class="features-banner__card">
-          <span class="features-banner__icon">{% render 'icon', icon: 'shield' %}</span>
-          <strong>Secure Checkout</strong>
-          <p>Trusted payments, protected data, and a checkout that feels effortless.</p>
-        </article>
-        <article class="features-banner__card">
-          <span class="features-banner__icon">{% render 'icon', icon: 'headset' %}</span>
-          <strong>Personal Support</strong>
-          <p>Quick help when you need sizing advice, order updates, or styling input.</p>
+        <article class="features-banner__point">
+          <span class="features-banner__index">03</span>
+          <div>
+            <strong>Private client feel</strong>
+            <p>Support that helps with sizing, styling, and order guidance without sounding robotic.</p>
+          </div>
         </article>
       </div>
     </div>

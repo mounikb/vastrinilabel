@@ -2,7 +2,7 @@
   <div class="page-width">
     <div class="site-footer__grid">
       <div class="site-footer__brand">
-        <div class="site-footer__brand-badge">Wear your aura</div>
+        <div class="site-footer__brand-badge">Vastrini label</div>
         <a href="{{ routes.root_url }}" class="site-footer__logo" aria-label="{{ shop.name | escape }}">
           <img src="{{ 'vastrini-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" width="360" height="104">
         </a>
@@ -46,12 +46,9 @@
       </div>
 
       <div class="site-footer__visit">
-        <span class="site-footer__visit-eyebrow">Visit us in style</span>
+        <span class="site-footer__visit-eyebrow">Visit us</span>
         <h3>{{ section.settings.location_title }}</h3>
         <p>{{ section.settings.location_body | newline_to_br }}</p>
-        <div class="site-footer__visit-meta">
-          <span>{% render 'icon', icon: 'pin' %} {{ shop.address.city | default: 'Bengaluru' }}</span>
-        </div>
         {%- if section.settings.primary_link_label != blank -%}
           <a href="{{ section.settings.primary_link | default: '/pages/contact' }}" class="site-footer__visit-link">
             <span>{{ section.settings.primary_link_label }}</span>
