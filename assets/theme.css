@@ -64,11 +64,8 @@ button.site-header__nav-link{background:transparent;border:0}
 .site-header__nav-item.is-open .site-header__dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(-4px)}
 .site-header__dropdown-link{display:block;padding:10px 18px;font-size:.84rem;letter-spacing:.04em}
 .site-header__dropdown-link:hover{background:rgba(122,31,61,.06);color:var(--color-primary)}
-.site-header__logo{justify-self:start;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:220px}
-.site-header__logo-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid rgba(197,18,18,.18);border-radius:999px;background:rgba(197,18,18,.05);font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:#9f1010}
-.site-header__logo-badge::before,.site-header__logo-badge::after{content:"";width:6px;height:6px;border-radius:999px;background:#c51212;box-shadow:0 0 0 4px rgba(197,18,18,.12)}
-.site-header__logo-mark{display:block}
-.site-header__logo img{width:auto;max-width:min(100%,260px);max-height:72px;object-fit:contain}
+.site-header__logo{justify-self:start;display:flex;align-items:center;min-width:220px}
+.site-header__logo img{width:auto;max-width:min(100%,280px);max-height:80px;object-fit:contain}
 .site-header__actions{display:flex;justify-content:flex-end;gap:10px;align-items:center;padding:8px 10px;border:1px solid rgba(197,18,18,.12);border-radius:999px;background:rgba(255,255,255,.85);box-shadow:0 16px 38px rgba(197,18,18,.08)}
 .site-header__actions button,.site-header__actions a{display:inline-flex;align-items:center;gap:6px;padding:8px;color:var(--color-text);position:relative}
 .site-header__action-link{width:42px;height:42px;justify-content:center;border-radius:999px;transition:background .2s ease,color .2s ease,transform .2s ease}
@@ -89,7 +86,6 @@ button.site-header__nav-link{background:transparent;border:0}
   .site-header__nav{display:none}
   .menu-toggle{display:inline-flex}
   .site-header__logo{justify-self:center;align-items:center;min-width:0}
-  .site-header__logo-badge{display:none}
   .site-header__logo img{max-height:58px;max-width:180px}
   .site-header__actions{padding:6px}
 }

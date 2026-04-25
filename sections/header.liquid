@@ -46,14 +46,11 @@
       </button>
 
       <a href="{{ routes.root_url }}" class="site-header__logo">
-        <span class="site-header__logo-badge">Wear Your Aura</span>
-        <span class="site-header__logo-mark">
-          {%- if section.settings.logo != blank -%}
-            <img src="{{ section.settings.logo | image_url: width: 520 }}" alt="{{ shop.name | escape }}" width="260" height="76">
-          {%- else -%}
-            <img src="{{ 'vastrini-logo.svg' | asset_url }}" alt="{{ shop.name | escape }}" width="260" height="76">
-          {%- endif -%}
-        </span>
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 520 }}" alt="{{ shop.name | escape }}" width="260" height="76">
+        {%- else -%}
+          <img src="{{ 'vastrini-logo.svg' | asset_url }}" alt="{{ shop.name | escape }}" width="260" height="76">
+        {%- endif -%}
       </a>
 
       <nav class="site-header__nav" aria-label="Primary">
