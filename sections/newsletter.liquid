@@ -1,15 +1,41 @@
 <section class="section">
   <div class="page-width">
-    <div class="newsletter">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow" style="display:block;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.6rem;opacity:.85">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{{ section.settings.heading }}</h2>
-      <p>{{ section.settings.body }}</p>
-      {%- form 'customer', class: 'newsletter-form' -%}
-        <input type="hidden" name="contact[tags]" value="newsletter">
-        <input type="email" name="contact[email]" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" required aria-label="Email">
-        <button type="submit">{{ 'general.newsletter_form.submit' | t }}</button>
-        {%- if form.posted_successfully? -%}<p style="margin-top:14px">{{ 'general.newsletter_form.confirmation' | t }}</p>{%- endif -%}
-      {%- endform -%}
+    <div class="newsletter-banner">
+      <div class="newsletter-banner__media">
+        {%- if section.settings.image != blank -%}
+          <img src="{{ section.settings.image | image_url: width: 1200 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1200" height="1200">
+        {%- else -%}
+          <div class="newsletter-banner__placeholder">
+            <span class="newsletter-banner__placeholder-badge">Vastrini Circle</span>
+            <img src="{{ 'vastrini-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" width="360" height="104">
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="newsletter-banner__content">
+        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+        <p>{{ section.settings.body }}</p>
+        <div class="newsletter-banner__tags">
+          <span>Early drops</span>
+          <span>Members-only offers</span>
+          <span>Styling notes</span>
+        </div>
+        {%- form 'customer', class: 'newsletter-form newsletter-banner__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="email" name="contact[email]" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" required aria-label="Email">
+          <button type="submit">{{ 'general.newsletter_form.submit' | t }}</button>
+          {%- if form.posted_successfully? -%}<p class="newsletter-banner__confirmation">{{ 'general.newsletter_form.confirmation' | t }}</p>{%- endif -%}
+        {%- endform -%}
+        {%- if section.settings.cta_text != blank -%}
+          <a href="{{ section.settings.cta_link | default: '#' }}" class="newsletter-banner__secondary">
+            <span class="newsletter-banner__secondary-icon">{% render 'icon', icon: 'arrow-up-right' %}</span>
+            <span>
+              <strong>{{ section.settings.cta_text }}</strong>
+              <small>{{ section.settings.cta_caption }}</small>
+            </span>
+          </a>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 </section>
@@ -18,9 +44,13 @@
 {
   "name": "Newsletter",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Join the club" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Get 10% off your first order" },
-    { "type": "textarea", "id": "body", "label": "Body", "default": "Sign up for first access to new drops, edits, and members-only sales." }
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Exclusive community" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Join our VIP community" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Get early access to new drops, private offers, styling notes, and behind-the-scenes updates." },
+    { "type": "text", "id": "cta_text", "label": "Secondary CTA title", "default": "Join via WhatsApp" },
+    { "type": "text", "id": "cta_caption", "label": "Secondary CTA caption", "default": "Exclusive updates. No spam. Leave anytime." },
+    { "type": "url", "id": "cta_link", "label": "Secondary CTA link" }
   ],
   "presets": [{ "name": "Newsletter" }]
 }

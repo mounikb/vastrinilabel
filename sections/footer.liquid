@@ -2,10 +2,21 @@
   <div class="page-width">
     <div class="site-footer__grid">
       <div class="site-footer__brand">
-        <h3>{{ shop.name }}</h3>
+        <div class="site-footer__brand-badge">Wear your aura</div>
+        <a href="{{ routes.root_url }}" class="site-footer__logo" aria-label="{{ shop.name | escape }}">
+          <img src="{{ 'vastrini-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" width="360" height="104">
+        </a>
         {%- if section.settings.tagline != blank -%}
-          <p style="margin-top:14px;max-width:320px;font-size:.9rem;line-height:1.6">{{ section.settings.tagline }}</p>
+          <p class="site-footer__tagline">{{ section.settings.tagline }}</p>
         {%- endif -%}
+        <div class="site-footer__meta">
+          {%- if section.settings.contact_email != blank -%}
+            <span>{% render 'icon', icon: 'mail' %} {{ section.settings.contact_email }}</span>
+          {%- endif -%}
+          {%- if section.settings.support_hours != blank -%}
+            <span>{% render 'icon', icon: 'clock' %} {{ section.settings.support_hours }}</span>
+          {%- endif -%}
+        </div>
         <div class="site-footer__social">
           {%- if settings.social_instagram_link != blank -%}<a href="{{ settings.social_instagram_link }}" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>{%- endif -%}
           {%- if settings.social_facebook_link != blank -%}<a href="{{ settings.social_facebook_link }}" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>{%- endif -%}
@@ -14,23 +25,40 @@
         </div>
       </div>
 
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'menu' -%}
-          <div class="site-footer__col" {{ block.shopify_attributes }}>
-            <h4>{{ block.settings.heading }}</h4>
-            <ul>
-              {%- for link in block.settings.menu.links -%}
-                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-              {%- endfor -%}
-            </ul>
-          </div>
-        {%- elsif block.type == 'text' -%}
-          <div class="site-footer__col" {{ block.shopify_attributes }}>
-            <h4>{{ block.settings.heading }}</h4>
-            <div style="font-size:.88rem;line-height:1.7">{{ block.settings.body }}</div>
-          </div>
+      <div class="site-footer__menus">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'menu' -%}
+            <div class="site-footer__col" {{ block.shopify_attributes }}>
+              <h4>{{ block.settings.heading }}</h4>
+              <ul>
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- elsif block.type == 'text' -%}
+            <div class="site-footer__col" {{ block.shopify_attributes }}>
+              <h4>{{ block.settings.heading }}</h4>
+              <div class="site-footer__text">{{ block.settings.body }}</div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <div class="site-footer__visit">
+        <span class="site-footer__visit-eyebrow">Visit us in style</span>
+        <h3>{{ section.settings.location_title }}</h3>
+        <p>{{ section.settings.location_body | newline_to_br }}</p>
+        <div class="site-footer__visit-meta">
+          <span>{% render 'icon', icon: 'pin' %} {{ shop.address.city | default: 'Bengaluru' }}</span>
+        </div>
+        {%- if section.settings.primary_link_label != blank -%}
+          <a href="{{ section.settings.primary_link | default: '/pages/contact' }}" class="site-footer__visit-link">
+            <span>{{ section.settings.primary_link_label }}</span>
+            {% render 'icon', icon: 'arrow-up-right' %}
+          </a>
         {%- endif -%}
-      {%- endfor -%}
+      </div>
     </div>
 
     <div class="site-footer__bottom">
@@ -45,7 +73,13 @@
   "name": "Footer",
   "max_blocks": 4,
   "settings": [
-    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Effortless contemporary fashion, made to be loved." }
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Effortless contemporary fashion with a softer, more elevated point of view." },
+    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "hello@vastrinilabel.com" },
+    { "type": "text", "id": "support_hours", "label": "Support hours", "default": "10:30 AM to 10:00 PM (All days)" },
+    { "type": "text", "id": "location_title", "label": "Location title", "default": "Bengaluru flagship" },
+    { "type": "textarea", "id": "location_body", "label": "Location body", "default": "Electronic City Phase 1,\nBengaluru 560100, India" },
+    { "type": "text", "id": "primary_link_label", "label": "Primary link label", "default": "Get directions" },
+    { "type": "url", "id": "primary_link", "label": "Primary link" }
   ],
   "blocks": [
     {

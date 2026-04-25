@@ -1,14 +1,47 @@
+{%- assign feature_product = collection.products.first -%}
 <div class="collection-banner">
-  <span class="collection-banner__eyebrow">Collection</span>
-  <h1>{{ collection.title }}</h1>
-  {%- if collection.description != blank -%}<p>{{ collection.description | strip_html | truncatewords: 30 }}</p>{%- endif -%}
+  <div class="page-width">
+    <div class="collection-banner__inner">
+      <div class="collection-banner__content">
+        <span class="collection-banner__eyebrow">Curated collection</span>
+        <h1>{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}
+          <p>{{ collection.description | strip_html | truncatewords: 30 }}</p>
+        {%- else -%}
+          <p>Every piece in this edit is selected to feel polished, wearable, and easy to style from day to night.</p>
+        {%- endif -%}
+        <div class="collection-banner__chips">
+          <span>{{ collection.products_count }} pieces</span>
+          <span>Fresh styling edit</span>
+          <span>Effortless wardrobe energy</span>
+        </div>
+      </div>
+      <div class="collection-banner__spotlight">
+        {%- if feature_product != blank and feature_product.featured_image != blank -%}
+          <div class="collection-banner__spotlight-media">
+            <img src="{{ feature_product.featured_image | image_url: width: 900 }}" alt="{{ feature_product.title | escape }}" width="450" height="600">
+          </div>
+          <div class="collection-banner__spotlight-copy">
+            <span>Featured in this edit</span>
+            <strong>{{ feature_product.title }}</strong>
+            <small>{{ feature_product.price | money }}</small>
+          </div>
+        {%- else -%}
+          <div class="collection-banner__spotlight-copy collection-banner__spotlight-copy--empty">
+            <span>Curated for you</span>
+            <strong>Refined silhouettes, elevated details, and a softer luxury palette.</strong>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="page-width">
   <div class="collection-toolbar">
-    <span>{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
-    <form>
-      <label for="SortBy" style="margin-right:8px">{{ 'collections.general.sort_by' | t }}</label>
+    <span class="collection-toolbar__count">{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
+    <form class="collection-toolbar__form">
+      <label for="SortBy">{{ 'collections.general.sort_by' | t }}</label>
       <select name="sort_by" id="SortBy" onchange="this.form.submit()">
         {%- assign sort_options = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending' | split: ',' -%}
         {%- for opt in sort_options -%}
@@ -22,7 +55,7 @@
 
   {%- paginate collection.products by 24 -%}
     {%- if collection.products.size > 0 -%}
-      <div class="product-grid">
+      <div class="product-grid product-grid--collection">
         {%- for product in collection.products -%}
           {% render 'product-card', product: product, show_quick: true %}
         {%- endfor -%}

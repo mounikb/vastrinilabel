@@ -1,36 +1,51 @@
-<section class="section--sm" style="background:{{ section.settings.bg_color }}">
-  <div class="iwt {% if section.settings.reverse %}iwt--reverse{% endif %}">
-    <div class="iwt__media">
-      {%- if section.settings.image != blank -%}
-        <img src="{{ section.settings.image | image_url: width: 1200 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1200" height="1200">
-      {%- else -%}
-        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
-      {%- endif -%}
-    </div>
-    <div class="iwt__content">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{{ section.settings.heading }}</h2>
-      <div>{{ section.settings.body }}</div>
-      {%- if section.settings.button_text != blank -%}
-        <p style="margin-top:24px"><a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a></p>
-      {%- endif -%}
+<section class="section features-section" style="background:{{ section.settings.bg_color }}">
+  <div class="page-width">
+    <div class="features-banner">
+      <div class="features-banner__intro">
+        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+        <div class="features-banner__copy">{{ section.settings.body }}</div>
+        {%- if section.settings.button_text != blank -%}
+          <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a>
+        {%- endif -%}
+      </div>
+      <div class="features-banner__grid">
+        <article class="features-banner__card">
+          <span class="features-banner__icon">{% render 'icon', icon: 'diamond' %}</span>
+          <strong>100% Handpicked Quality</strong>
+          <p>Chosen for flattering fits, polished finishing, and wardrobe-ready ease.</p>
+        </article>
+        <article class="features-banner__card">
+          <span class="features-banner__icon">{% render 'icon', icon: 'truck' %}</span>
+          <strong>2-5 Day Delivery</strong>
+          <p>Fast pan-India shipping with smooth tracking and careful packaging.</p>
+        </article>
+        <article class="features-banner__card">
+          <span class="features-banner__icon">{% render 'icon', icon: 'shield' %}</span>
+          <strong>Secure Checkout</strong>
+          <p>Trusted payments, protected data, and a checkout that feels effortless.</p>
+        </article>
+        <article class="features-banner__card">
+          <span class="features-banner__icon">{% render 'icon', icon: 'headset' %}</span>
+          <strong>Personal Support</strong>
+          <p>Quick help when you need sizing advice, order updates, or styling input.</p>
+        </article>
+      </div>
     </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Image with text",
+  "name": "Features banner",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Image" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our story" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Crafted for the modern woman" },
-    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Pieces designed to move with you - from sunrise meetings to sunset dinners. Every Berrylush look is born from a love of detail and an obsession with fit.</p>" },
-    { "type": "text", "id": "button_text", "label": "Button text", "default": "Discover more" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why Vastrini" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Designed for women who want ease with edge" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Every edit is curated to look elevated, feel effortless, and arrive beautifully. A softer luxury mood, built for everyday dressing.</p>" },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Explore collections" },
     { "type": "url", "id": "button_link", "label": "Button link" },
-    { "type": "checkbox", "id": "reverse", "label": "Reverse order", "default": false },
-    { "type": "color", "id": "bg_color", "label": "Background", "default": "#FBF7F4" }
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#F9F2EF" }
   ],
-  "presets": [{ "name": "Image with text" }]
+  "presets": [{ "name": "Features banner" }]
 }
 {% endschema %}

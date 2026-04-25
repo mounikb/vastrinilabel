@@ -13,8 +13,7 @@
     if (!drawer) return;
     triggers.forEach((trigger) => trigger.addEventListener('click', () => {
       drawer.classList.add('is-open');
-      overlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
+      syncOverlayState();
     }));
     drawer.querySelectorAll('[data-close]').forEach((closeButton) =>
       closeButton.addEventListener('click', () => closeDrawers())
@@ -23,14 +22,32 @@
 
   function closeDrawers() {
     document.querySelectorAll('.mobile-drawer,.cart-drawer').forEach((drawer) => drawer.classList.remove('is-open'));
-    overlay.classList.remove('is-open');
-    document.body.style.overflow = '';
+    syncOverlayState();
   }
 
-  overlay.addEventListener('click', closeDrawers);
+  function closeModals() {
+    document.querySelectorAll('.site-modal').forEach((modal) => {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    });
+    syncOverlayState();
+  }
+
+  function syncOverlayState() {
+    const hasOpenSurface = document.querySelector('.mobile-drawer.is-open, .cart-drawer.is-open, .site-modal.is-open');
+    overlay.classList.toggle('is-open', Boolean(hasOpenSurface));
+    document.body.style.overflow = hasOpenSurface ? 'hidden' : '';
+  }
+
+  overlay.addEventListener('click', () => {
+    closeDrawers();
+    closeModals();
+    closeDropdowns();
+  });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       closeDrawers();
+      closeModals();
       closeDropdowns();
     }
   });
@@ -39,6 +56,7 @@
     bindDrawerToggle('[data-open-menu]', '.mobile-drawer');
     bindDrawerToggle('[data-open-cart]', '.cart-drawer');
     initDropdowns();
+    initModals();
 
     /* -------- Hero slideshow -------- */
     document.querySelectorAll('[data-hero]').forEach(initHero);
@@ -103,9 +121,24 @@
   }
 
   function initDropdowns() {
+    const desktop = window.matchMedia('(min-width: 991px)');
     document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
       const toggle = dropdown.querySelector('[data-dropdown-toggle]');
       if (!toggle) return;
+
+      dropdown.addEventListener('mouseenter', () => {
+        if (!desktop.matches) return;
+        closeDropdowns(dropdown);
+        dropdown.classList.add('is-open');
+        toggle.setAttribute('aria-expanded', 'true');
+      });
+
+      dropdown.addEventListener('mouseleave', () => {
+        if (!desktop.matches) return;
+        dropdown.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+
       toggle.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -122,12 +155,28 @@
     });
   }
 
+  function initModals() {
+    const loginModal = document.querySelector('[data-login-modal]');
+    if (!loginModal) return;
+
+    document.querySelectorAll('[data-open-login-modal]').forEach((button) => {
+      button.addEventListener('click', () => {
+        loginModal.classList.add('is-open');
+        loginModal.setAttribute('aria-hidden', 'false');
+        syncOverlayState();
+      });
+    });
+
+    loginModal.querySelectorAll('[data-close-modal]').forEach((button) => {
+      button.addEventListener('click', closeModals);
+    });
+  }
+
   function openCartDrawer() {
     const drawer = document.querySelector('.cart-drawer');
     if (!drawer) return;
     drawer.classList.add('is-open');
-    overlay.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
+    syncOverlayState();
   }
 
   async function refreshCart() {
