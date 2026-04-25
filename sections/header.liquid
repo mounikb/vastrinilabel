@@ -46,11 +46,14 @@
       </button>
 
       <a href="{{ routes.root_url }}" class="site-header__logo">
-        {%- if section.settings.logo != blank -%}
-          <img src="{{ section.settings.logo | image_url: width: 320 }}" alt="{{ shop.name | escape }}" width="160" height="44">
-        {%- else -%}
-          {{ shop.name }}
-        {%- endif -%}
+        <span class="site-header__logo-badge">Wear Your Aura</span>
+        <span class="site-header__logo-mark">
+          {%- if section.settings.logo != blank -%}
+            <img src="{{ section.settings.logo | image_url: width: 520 }}" alt="{{ shop.name | escape }}" width="260" height="76">
+          {%- else -%}
+            <img src="{{ 'vastrini-logo.svg' | asset_url }}" alt="{{ shop.name | escape }}" width="260" height="76">
+          {%- endif -%}
+        </span>
       </a>
 
       <nav class="site-header__nav" aria-label="Primary">
@@ -99,10 +102,10 @@
       </nav>
 
       <div class="site-header__actions">
-        <a href="{{ routes.search_url }}" aria-label="{{ 'general.search.search' | t }}">{% render 'icon', icon: 'search' %}</a>
+        <a href="{{ routes.search_url }}" aria-label="{{ 'general.search.search' | t }}" class="site-header__action-link">{% render 'icon', icon: 'search' %}</a>
         {%- if shop.customer_accounts_enabled -%}
           <details class="site-header__account">
-            <summary aria-label="{{ account_label }}">
+            <summary aria-label="{{ account_label }}" class="site-header__action-link">
               {% render 'icon', icon: 'user' %}
             </summary>
             <div class="site-header__account-menu">
@@ -117,9 +120,9 @@
             </div>
           </details>
         {%- else -%}
-          <a href="{{ account_url }}" aria-label="{{ account_label }}">{% render 'icon', icon: 'user' %}</a>
+          <a href="{{ account_url }}" aria-label="{{ account_label }}" class="site-header__action-link">{% render 'icon', icon: 'user' %}</a>
         {%- endif -%}
-        <button data-open-cart aria-label="{{ 'cart.general.title' | t }}">
+        <button data-open-cart aria-label="{{ 'cart.general.title' | t }}" class="site-header__action-link site-header__cart-trigger">
           {% render 'icon', icon: 'bag' %}
           <span class="cart-count" data-cart-count {% if cart.item_count == 0 %}style="display:none"{% endif %}>{{ cart.item_count }}</span>
         </button>
