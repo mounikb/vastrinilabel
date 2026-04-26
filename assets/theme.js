@@ -245,8 +245,8 @@
   function initProductCarousel(root) {
     const viewport = root.querySelector('[data-carousel-viewport]');
     const track = root.querySelector('[data-carousel-track]');
-    const prev = root.parentElement.querySelector('[data-carousel-prev]');
-    const next = root.parentElement.querySelector('[data-carousel-next]');
+    const prev = root.querySelector('[data-carousel-prev]');
+    const next = root.querySelector('[data-carousel-next]');
     if (!viewport || !track) return;
 
     const originalItems = Array.from(track.children);

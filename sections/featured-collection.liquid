@@ -1,18 +1,8 @@
 <section class="section">
   <div class="page-width">
     <div class="section-heading featured-carousel__heading">
-      <div>
-        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-        <h2>{{ section.settings.heading }}</h2>
-      </div>
-      <div class="featured-carousel__arrows" aria-hidden="true">
-        <button type="button" class="featured-carousel__arrow" data-carousel-prev aria-label="Scroll left">
-          {% render 'icon', icon: 'arrow-left' %}
-        </button>
-        <button type="button" class="featured-carousel__arrow" data-carousel-next aria-label="Scroll right">
-          {% render 'icon', icon: 'arrow-right' %}
-        </button>
-      </div>
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
     </div>
     {%- liquid
       assign coll = blank
@@ -49,6 +39,9 @@
       endif
     -%}
     <div class="featured-carousel" data-product-carousel>
+      <button type="button" class="featured-carousel__arrow featured-carousel__arrow--prev" data-carousel-prev aria-label="Scroll left">
+        {% render 'icon', icon: 'arrow-left' %}
+      </button>
       <div class="featured-carousel__viewport" data-carousel-viewport>
         <div class="featured-carousel__track" data-carousel-track>
       {%- if coll.products.size > 0 -%}
@@ -80,6 +73,9 @@
       {%- endif -%}
         </div>
       </div>
+      <button type="button" class="featured-carousel__arrow featured-carousel__arrow--next" data-carousel-next aria-label="Scroll right">
+        {% render 'icon', icon: 'arrow-right' %}
+      </button>
     </div>
     {%- if section.settings.show_view_all and coll != blank and rendered_count > 0 -%}
       <div class="text-center mt-8">
