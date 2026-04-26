@@ -124,6 +124,7 @@
     "iwt": {
       "type": "image-with-text",
       "settings": {
+        "image": "shopify://shop_images/photo-1588117260148-b47818741c74.jpg",
         "eyebrow": "Why Vastrini",
         "heading": "A softer luxury experience, built around ease",
         "body": "<p>From refined silhouettes to fast support, every part of the experience is designed to feel polished, personal, and effortless to wear.</p>",
@@ -154,11 +155,14 @@
     "newsletter": {
       "type": "newsletter",
       "settings": {
+        "image": "shopify://shop_images/photo-1490481651871-ab68de25d43d.jpg",
+        "media_badge": "The inner circle",
         "eyebrow": "Exclusive community",
         "heading": "Join our VIP community",
         "body": "Get early access to new drops, private offers, styling notes, and behind-the-scenes updates.",
         "cta_text": "Join via WhatsApp",
-        "cta_caption": "Exclusive updates. No spam. Leave anytime."
+        "cta_caption": "Exclusive updates. No spam. Leave anytime.",
+        "cta_link": ""
       }
     }
   },
