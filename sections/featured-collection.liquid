@@ -1,8 +1,18 @@
 <section class="section">
   <div class="page-width">
-    <div class="section-heading">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{{ section.settings.heading }}</h2>
+    <div class="section-heading featured-carousel__heading">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+      </div>
+      <div class="featured-carousel__arrows" aria-hidden="true">
+        <button type="button" class="featured-carousel__arrow" data-carousel-prev aria-label="Scroll left">
+          {% render 'icon', icon: 'arrow-left' %}
+        </button>
+        <button type="button" class="featured-carousel__arrow" data-carousel-next aria-label="Scroll right">
+          {% render 'icon', icon: 'arrow-right' %}
+        </button>
+      </div>
     </div>
     {%- liquid
       assign coll = blank
@@ -38,7 +48,9 @@
         assign view_all_url = coll.url | append: '/' | append: filter_tag_handle
       endif
     -%}
-    <div class="product-grid">
+    <div class="featured-carousel" data-product-carousel>
+      <div class="featured-carousel__viewport" data-carousel-viewport>
+        <div class="featured-carousel__track" data-carousel-track>
       {%- if coll.products.size > 0 -%}
         {%- for product in coll.products -%}
           {%- liquid
@@ -54,7 +66,7 @@
               endfor
             endif
           -%}
-          {%- if show_product and rendered_count < section.settings.product_count -%}
+          {%- if show_product -%}
             {% render 'product-card', product: product, show_quick: true %}
             {%- assign rendered_count = rendered_count | plus: 1 -%}
           {%- endif -%}
@@ -62,10 +74,12 @@
       {%- endif -%}
 
       {%- if rendered_count == 0 -%}
-        <p style="grid-column:1/-1;text-align:center;color:var(--color-muted);padding:40px 0">
+        <p class="featured-carousel__empty">
           No matching products yet. Add products to this collection and tag them in Shopify admin.
         </p>
       {%- endif -%}
+        </div>
+      </div>
     </div>
     {%- if section.settings.show_view_all and coll != blank and rendered_count > 0 -%}
       <div class="text-center mt-8">

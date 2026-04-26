@@ -61,6 +61,9 @@
     /* -------- Hero slideshow -------- */
     document.querySelectorAll('[data-hero]').forEach(initHero);
 
+    /* -------- Featured collection carousels -------- */
+    document.querySelectorAll('[data-product-carousel]').forEach(initProductCarousel);
+
     /* -------- Quantity selectors -------- */
     document.querySelectorAll('[data-qty]').forEach(initQty);
 
@@ -237,6 +240,112 @@
 
     go(0);
     restartTimer();
+  }
+
+  function initProductCarousel(root) {
+    const viewport = root.querySelector('[data-carousel-viewport]');
+    const track = root.querySelector('[data-carousel-track]');
+    const prev = root.parentElement.querySelector('[data-carousel-prev]');
+    const next = root.parentElement.querySelector('[data-carousel-next]');
+    if (!viewport || !track) return;
+
+    const originalItems = Array.from(track.children);
+    if (originalItems.length < 2 || originalItems[0].classList.contains('featured-carousel__empty')) {
+      if (prev) prev.style.display = 'none';
+      if (next) next.style.display = 'none';
+      return;
+    }
+
+    const beforeFragment = document.createDocumentFragment();
+    const afterFragment = document.createDocumentFragment();
+    originalItems.forEach((item) => {
+      const beforeClone = item.cloneNode(true);
+      beforeClone.setAttribute('aria-hidden', 'true');
+      beforeFragment.appendChild(beforeClone);
+
+      const afterClone = item.cloneNode(true);
+      afterClone.setAttribute('aria-hidden', 'true');
+      afterFragment.appendChild(afterClone);
+    });
+    track.prepend(beforeFragment);
+    track.append(afterFragment);
+
+    let segmentStart = 0;
+    let segmentWidth = 0;
+    let isAdjusting = false;
+    let isPointerDown = false;
+    let pointerStart = 0;
+    let scrollStart = 0;
+
+    const measure = () => {
+      const items = Array.from(track.children);
+      const firstOriginal = items[originalItems.length];
+      const firstAfter = items[originalItems.length * 2];
+      if (!firstOriginal || !firstAfter) return;
+      segmentStart = firstOriginal.offsetLeft;
+      segmentWidth = firstAfter.offsetLeft - firstOriginal.offsetLeft;
+      isAdjusting = true;
+      viewport.scrollLeft = segmentStart;
+      requestAnimationFrame(() => {
+        isAdjusting = false;
+      });
+    };
+
+    const stepAmount = () => {
+      const firstCard = track.querySelector('.product-card');
+      if (!firstCard) return viewport.clientWidth * 0.85;
+      const style = window.getComputedStyle(track);
+      const gap = parseFloat(style.columnGap || style.gap || '24') || 24;
+      return firstCard.getBoundingClientRect().width + gap;
+    };
+
+    const normalizeScroll = () => {
+      if (isAdjusting || !segmentWidth) return;
+      if (viewport.scrollLeft < segmentStart - 8) {
+        viewport.scrollLeft += segmentWidth;
+      } else if (viewport.scrollLeft >= segmentStart + segmentWidth - 8) {
+        viewport.scrollLeft -= segmentWidth;
+      }
+    };
+
+    const glide = (direction) => {
+      viewport.scrollBy({ left: stepAmount() * direction, behavior: 'smooth' });
+    };
+
+    if (prev) prev.addEventListener('click', () => glide(-1));
+    if (next) next.addEventListener('click', () => glide(1));
+
+    viewport.addEventListener('scroll', normalizeScroll);
+    window.addEventListener('resize', measure);
+
+    viewport.addEventListener('pointerdown', (event) => {
+      isPointerDown = true;
+      pointerStart = event.clientX;
+      scrollStart = viewport.scrollLeft;
+      viewport.classList.add('is-dragging');
+    });
+
+    viewport.addEventListener('pointermove', (event) => {
+      if (!isPointerDown) return;
+      const delta = event.clientX - pointerStart;
+      viewport.scrollLeft = scrollStart - delta;
+    });
+
+    const stopPointerDrag = () => {
+      isPointerDown = false;
+      viewport.classList.remove('is-dragging');
+    };
+
+    viewport.addEventListener('pointerup', stopPointerDrag);
+    viewport.addEventListener('pointerleave', stopPointerDrag);
+    viewport.addEventListener('pointercancel', stopPointerDrag);
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(measure);
+    } else {
+      window.setTimeout(measure, 120);
+    }
+    window.setTimeout(measure, 360);
   }
 
   function initQty(root) {
