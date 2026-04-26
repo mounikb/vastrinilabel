@@ -1,10 +1,11 @@
-{%- assign feature_product = collection.products.first -%}
 <div class="collection-banner">
   <div class="page-width">
     <div class="collection-banner__inner">
       <div class="collection-banner__content">
         <span class="collection-banner__eyebrow">Curated collection</span>
         <h1>{{ collection.title }}</h1>
+      </div>
+      <div class="collection-banner__meta">
         {%- if collection.description != blank -%}
           <p>{{ collection.description | strip_html | truncatewords: 30 }}</p>
         {%- else -%}
@@ -15,23 +16,6 @@
           <span>Fresh styling edit</span>
           <span>Effortless wardrobe energy</span>
         </div>
-      </div>
-      <div class="collection-banner__spotlight">
-        {%- if feature_product != blank and feature_product.featured_image != blank -%}
-          <div class="collection-banner__spotlight-media">
-            <img src="{{ feature_product.featured_image | image_url: width: 900 }}" alt="{{ feature_product.title | escape }}" width="450" height="600">
-          </div>
-          <div class="collection-banner__spotlight-copy">
-            <span>Featured in this edit</span>
-            <strong>{{ feature_product.title }}</strong>
-            <small>{{ feature_product.price | money }}</small>
-          </div>
-        {%- else -%}
-          <div class="collection-banner__spotlight-copy collection-banner__spotlight-copy--empty">
-            <span>Curated for you</span>
-            <strong>Refined silhouettes, elevated details, and a softer luxury palette.</strong>
-          </div>
-        {%- endif -%}
       </div>
     </div>
   </div>
