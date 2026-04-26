@@ -5,18 +5,6 @@
         <span class="collection-banner__eyebrow">Curated collection</span>
         <h1>{{ collection.title }}</h1>
       </div>
-      <div class="collection-banner__meta">
-        {%- if collection.description != blank -%}
-          <p>{{ collection.description | strip_html | truncatewords: 30 }}</p>
-        {%- else -%}
-          <p>Every piece in this edit is selected to feel polished, wearable, and easy to style from day to night.</p>
-        {%- endif -%}
-        <div class="collection-banner__chips">
-          <span>{{ collection.products_count }} pieces</span>
-          <span>Fresh styling edit</span>
-          <span>Effortless wardrobe energy</span>
-        </div>
-      </div>
     </div>
   </div>
 </div>
