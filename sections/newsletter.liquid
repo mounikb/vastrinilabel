@@ -1,36 +1,37 @@
 <section class="section">
   <div class="page-width">
+    {%- liquid
+      assign styled_heading = section.settings.heading
+      assign styled_heading = styled_heading | replace: 'VIP community', '<em>VIP Community</em>'
+      assign styled_heading = styled_heading | replace: 'VIP Community', '<em>VIP Community</em>'
+    -%}
     <div class="newsletter-banner">
       <div class="newsletter-banner__media">
         {%- if section.settings.image != blank -%}
           <img src="{{ section.settings.image | image_url: width: 1200 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1200" height="1200">
         {%- else -%}
           <div class="newsletter-banner__placeholder">
-            <span class="newsletter-banner__placeholder-badge">Private list</span>
+            <span class="newsletter-banner__placeholder-badge">The inner circle</span>
             <img src="{{ 'vastrini-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" width="360" height="104">
           </div>
         {%- endif -%}
+        <span class="newsletter-banner__floating-label">
+          <span>&larr;</span>
+          <span>{{ section.settings.media_badge | default: 'The inner circle' }}</span>
+        </span>
       </div>
       <div class="newsletter-banner__content">
         {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-        <h2>{{ section.settings.heading }}</h2>
+        <h2 class="newsletter-banner__headline">{{ styled_heading }}</h2>
         <p>{{ section.settings.body }}</p>
-        <div class="newsletter-banner__notes">
-          <span>Early drops</span>
-          <span>Members-only offers</span>
-          <span>Styling notes</span>
-        </div>
-        {%- form 'customer', class: 'newsletter-form newsletter-banner__form' -%}
-          <input type="hidden" name="contact[tags]" value="newsletter">
-          <input type="email" name="contact[email]" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" required aria-label="Email">
-          <button type="submit">{{ 'general.newsletter_form.submit' | t }}</button>
-          {%- if form.posted_successfully? -%}<p class="newsletter-banner__confirmation">{{ 'general.newsletter_form.confirmation' | t }}</p>{%- endif -%}
-        {%- endform -%}
         {%- if section.settings.cta_text != blank -%}
-          <div class="newsletter-banner__subcopy">
-            <strong>{{ section.settings.cta_text }}</strong>
-            <small>{{ section.settings.cta_caption }}</small>
-          </div>
+          <a href="{{ section.settings.cta_link | default: '#' }}" class="newsletter-banner__cta">
+            <span class="newsletter-banner__cta-icon">{% render 'icon', icon: 'arrow-up-right' %}</span>
+            <span class="newsletter-banner__cta-copy">
+              <strong>{{ section.settings.cta_text }}</strong>
+              <small>{{ section.settings.cta_caption }}</small>
+            </span>
+          </a>
         {%- endif -%}
       </div>
     </div>
@@ -42,9 +43,10 @@
   "name": "Newsletter",
   "settings": [
     { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "media_badge", "label": "Media badge", "default": "The inner circle" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Exclusive community" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Join our VIP community" },
-    { "type": "textarea", "id": "body", "label": "Body", "default": "Get early access to new drops, private offers, styling notes, and behind-the-scenes updates." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Get early access to new drops, exclusive offers, styling tips, and behind-the-scenes updates. Be part of the Vastrini inner circle." },
     { "type": "text", "id": "cta_text", "label": "Secondary CTA title", "default": "Join via WhatsApp" },
     { "type": "text", "id": "cta_caption", "label": "Secondary CTA caption", "default": "Exclusive updates. No spam. Leave anytime." },
     { "type": "url", "id": "cta_link", "label": "Secondary CTA link" }

@@ -1,13 +1,36 @@
 <section class="section features-section" style="background:{{ section.settings.bg_color }}">
   <div class="page-width">
     <div class="features-banner">
-      <div class="features-banner__intro">
-        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-        <h2>{{ section.settings.heading }}</h2>
-        <div class="features-banner__copy">{{ section.settings.body }}</div>
-        {%- if section.settings.button_text != blank -%}
-          <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a>
-        {%- endif -%}
+      <div class="features-banner__story">
+        <div class="features-banner__media">
+          {%- if section.settings.image != blank -%}
+            <img
+              src="{{ section.settings.image | image_url: width: 1400 }}"
+              alt="{{ section.settings.image.alt | escape }}"
+              loading="lazy"
+              width="{{ section.settings.image.width }}"
+              height="{{ section.settings.image.height }}"
+            >
+          {%- else -%}
+            <img
+              src="{{ 'vastrini-logo.png' | asset_url }}"
+              alt="Vastrini"
+              loading="lazy"
+              width="1200"
+              height="700"
+              class="features-banner__fallback-logo"
+            >
+          {%- endif -%}
+          <div class="features-banner__overlay"></div>
+          <div class="features-banner__intro">
+            {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+            <h2>{{ section.settings.heading }}</h2>
+            <div class="features-banner__copy">{{ section.settings.body }}</div>
+            {%- if section.settings.button_text != blank -%}
+              <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a>
+            {%- endif -%}
+          </div>
+        </div>
       </div>
       <div class="features-banner__rail" aria-label="Brand promises">
         <article class="features-banner__point">
@@ -40,9 +63,10 @@
 {
   "name": "Features banner",
   "settings": [
+    { "type": "image_picker", "id": "image", "label": "Editorial image" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why Vastrini" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Designed for women who want ease with edge" },
-    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Every edit is curated to look elevated, feel effortless, and arrive beautifully. A softer luxury mood, built for everyday dressing.</p>" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A softer luxury, built around ease." },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>From refined silhouettes to attentive support, designed to feel polished, personal, and effortless to wear.</p>" },
     { "type": "text", "id": "button_text", "label": "Button text", "default": "Explore collections" },
     { "type": "url", "id": "button_link", "label": "Button link" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#F9F2EF" }
