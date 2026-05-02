@@ -2,34 +2,13 @@
   <div class="page-width">
     <div class="features-banner">
       <div class="features-banner__story">
-        <div class="features-banner__media">
-          {%- if section.settings.image != blank -%}
-            <img
-              src="{{ section.settings.image | image_url: width: 1400 }}"
-              alt="{{ section.settings.image.alt | escape }}"
-              loading="lazy"
-              width="{{ section.settings.image.width }}"
-              height="{{ section.settings.image.height }}"
-            >
-          {%- else -%}
-            <img
-              src="{{ 'vastrini-logo.png' | asset_url }}"
-              alt="Vastrini"
-              loading="lazy"
-              width="1200"
-              height="700"
-              class="features-banner__fallback-logo"
-            >
+        <div class="features-banner__intro">
+          {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+          <h2>{{ section.settings.heading }}</h2>
+          <div class="features-banner__copy">{{ section.settings.body }}</div>
+          {%- if section.settings.button_text != blank -%}
+            <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a>
           {%- endif -%}
-          <div class="features-banner__overlay"></div>
-          <div class="features-banner__intro">
-            {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-            <h2>{{ section.settings.heading }}</h2>
-            <div class="features-banner__copy">{{ section.settings.body }}</div>
-            {%- if section.settings.button_text != blank -%}
-              <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a>
-            {%- endif -%}
-          </div>
         </div>
       </div>
       <div class="features-banner__rail" aria-label="Brand promises">
