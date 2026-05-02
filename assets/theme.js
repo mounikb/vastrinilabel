@@ -64,6 +64,9 @@
     /* -------- Featured collection carousels -------- */
     document.querySelectorAll('[data-product-carousel]').forEach(initProductCarousel);
 
+    /* -------- Collection price filters -------- */
+    document.querySelectorAll('[data-price-filter]').forEach(initPriceFilter);
+
     /* -------- Quantity selectors -------- */
     document.querySelectorAll('[data-qty]').forEach(initQty);
 
@@ -111,6 +114,12 @@
       if (!removeButton) return;
       event.preventDefault();
       await updateLine(removeButton.dataset.cartRemove, 0);
+    });
+
+    document.addEventListener('click', async (event) => {
+      const shareButton = event.target.closest('[data-share-product]');
+      if (!shareButton) return;
+      await handleProductShare(event, shareButton);
     });
   });
 
@@ -346,6 +355,90 @@
       window.setTimeout(measure, 120);
     }
     window.setTimeout(measure, 360);
+  }
+
+  function initPriceFilter(root) {
+    const grid = document.querySelector('.product-grid--collection');
+    const resultLabel = document.querySelector('[data-price-results]');
+    const minRange = root.querySelector('[data-price-range="min"]');
+    const maxRange = root.querySelector('[data-price-range="max"]');
+    const minInput = root.querySelector('[data-price-input="min"]');
+    const maxInput = root.querySelector('[data-price-input="max"]');
+    if (!grid || !minRange || !maxRange || !minInput || !maxInput) return;
+
+    const cards = Array.from(grid.querySelectorAll('.product-card[data-price]'));
+    if (!cards.length) return;
+
+    const absoluteMin = Number(root.dataset.minPrice || minRange.min || 0);
+    const absoluteMax = Number(root.dataset.maxPrice || maxRange.max || 0);
+
+    const syncBounds = () => {
+      let minValue = Number(minInput.value || absoluteMin);
+      let maxValue = Number(maxInput.value || absoluteMax);
+
+      if (minValue < absoluteMin) minValue = absoluteMin;
+      if (maxValue > absoluteMax) maxValue = absoluteMax;
+      if (minValue > maxValue) {
+        if (document.activeElement === minInput || document.activeElement === minRange) {
+          maxValue = minValue;
+        } else {
+          minValue = maxValue;
+        }
+      }
+
+      minRange.value = minValue;
+      maxRange.value = maxValue;
+      minInput.value = minValue;
+      maxInput.value = maxValue;
+      return { minValue, maxValue };
+    };
+
+    const applyFilter = () => {
+      const { minValue, maxValue } = syncBounds();
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const price = Number(card.dataset.price || 0);
+        const visible = price >= minValue && price <= maxValue;
+        card.hidden = !visible;
+        if (visible) visibleCount += 1;
+      });
+
+      if (resultLabel) {
+        resultLabel.textContent = `${visibleCount} product${visibleCount === 1 ? '' : 's'}`;
+      }
+    };
+
+    [minRange, maxRange, minInput, maxInput].forEach((input) => {
+      input.addEventListener('input', applyFilter);
+      input.addEventListener('change', applyFilter);
+    });
+
+    applyFilter();
+  }
+
+  async function handleProductShare(event, button) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const card = button.closest('.product-card');
+    if (!card) return;
+
+    const shareUrl = card.dataset.productUrl;
+    const shareTitle = card.dataset.productTitle || document.title;
+    if (!shareUrl) return;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: shareTitle, url: shareUrl });
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+        button.classList.add('is-copied');
+        window.setTimeout(() => button.classList.remove('is-copied'), 1600);
+      } else {
+        window.open(shareUrl, '_blank', 'noopener');
+      }
+    } catch (error) {}
   }
 
   function initQty(root) {

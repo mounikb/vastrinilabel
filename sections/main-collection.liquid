@@ -10,22 +10,62 @@
 </div>
 
 <div class="page-width">
-  <div class="collection-toolbar">
-    <span class="collection-toolbar__count">{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
-    <form class="collection-toolbar__form">
-      <label for="SortBy">{{ 'collections.general.sort_by' | t }}</label>
-      <select name="sort_by" id="SortBy" onchange="this.form.submit()">
-        {%- assign sort_options = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending' | split: ',' -%}
-        {%- for opt in sort_options -%}
-          <option value="{{ opt }}" {% if collection.sort_by == opt or collection.default_sort_by == opt and collection.sort_by == blank %}selected{% endif %}>
-            {{ opt | replace: '-', '_' | prepend: 'collections.sorting.' | t }}
-          </option>
-        {%- endfor -%}
-      </select>
-    </form>
-  </div>
-
   {%- paginate collection.products by 24 -%}
+    {%- liquid
+      assign page_min_price = blank
+      assign page_max_price = 0
+      for product in collection.products
+        if page_min_price == blank or product.price < page_min_price
+          assign page_min_price = product.price
+        endif
+        if product.price > page_max_price
+          assign page_max_price = product.price
+        endif
+      endfor
+    -%}
+
+    <div class="collection-toolbar">
+      <div class="collection-toolbar__stack">
+        <span class="collection-toolbar__count" data-price-results>{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
+        {%- if collection.products.size > 0 -%}
+          <div
+            class="price-filter"
+            data-price-filter
+            data-min-price="{{ page_min_price }}"
+            data-max-price="{{ page_max_price }}"
+            data-results-label="{{ 'collections.general.items_with_count' | t: count: collection.products_count | escape }}"
+          >
+            <span class="price-filter__label">Price range</span>
+            <div class="price-filter__sliders">
+              <input type="range" min="{{ page_min_price }}" max="{{ page_max_price }}" value="{{ page_min_price }}" step="100" data-price-range="min" aria-label="Minimum price">
+              <input type="range" min="{{ page_min_price }}" max="{{ page_max_price }}" value="{{ page_max_price }}" step="100" data-price-range="max" aria-label="Maximum price">
+            </div>
+            <div class="price-filter__fields">
+              <label>
+                <span>Min</span>
+                <input type="number" min="{{ page_min_price }}" max="{{ page_max_price }}" value="{{ page_min_price }}" step="100" data-price-input="min">
+              </label>
+              <label>
+                <span>Max</span>
+                <input type="number" min="{{ page_min_price }}" max="{{ page_max_price }}" value="{{ page_max_price }}" step="100" data-price-input="max">
+              </label>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+      <form class="collection-toolbar__form">
+        <label for="SortBy">{{ 'collections.general.sort_by' | t }}</label>
+        <select name="sort_by" id="SortBy" onchange="this.form.submit()">
+          {%- assign sort_options = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending' | split: ',' -%}
+          {%- for opt in sort_options -%}
+            <option value="{{ opt }}" {% if collection.sort_by == opt or collection.default_sort_by == opt and collection.sort_by == blank %}selected{% endif %}>
+              {{ opt | replace: '-', '_' | prepend: 'collections.sorting.' | t }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </form>
+    </div>
+
     {%- if collection.products.size > 0 -%}
       <div class="product-grid product-grid--collection">
         {%- for product in collection.products -%}
