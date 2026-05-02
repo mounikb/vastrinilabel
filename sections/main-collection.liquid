@@ -22,6 +22,8 @@
           assign page_max_price = product.price
         endif
       endfor
+      assign page_min_price_display = page_min_price | divided_by: 100
+      assign page_max_price_display = page_max_price | divided_by: 100
     -%}
 
     <div class="collection-toolbar">
@@ -31,23 +33,23 @@
           <div
             class="price-filter"
             data-price-filter
-            data-min-price="{{ page_min_price }}"
-            data-max-price="{{ page_max_price }}"
+            data-min-price="{{ page_min_price_display }}"
+            data-max-price="{{ page_max_price_display }}"
             data-results-label="{{ 'collections.general.items_with_count' | t: count: collection.products_count | escape }}"
           >
             <span class="price-filter__label">Price range</span>
             <div class="price-filter__sliders">
-              <input type="range" min="{{ page_min_price }}" max="{{ page_max_price }}" value="{{ page_min_price }}" step="100" data-price-range="min" aria-label="Minimum price">
-              <input type="range" min="{{ page_min_price }}" max="{{ page_max_price }}" value="{{ page_max_price }}" step="100" data-price-range="max" aria-label="Maximum price">
+              <input type="range" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" value="{{ page_min_price_display }}" step="1" data-price-range="min" aria-label="Minimum price">
+              <input type="range" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" value="{{ page_max_price_display }}" step="1" data-price-range="max" aria-label="Maximum price">
             </div>
             <div class="price-filter__fields">
               <label>
                 <span>Min</span>
-                <input type="number" min="{{ page_min_price }}" max="{{ page_max_price }}" value="{{ page_min_price }}" step="100" data-price-input="min">
+                <input type="number" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" value="{{ page_min_price_display }}" step="1" data-price-input="min">
               </label>
               <label>
                 <span>Max</span>
-                <input type="number" min="{{ page_min_price }}" max="{{ page_max_price }}" value="{{ page_max_price }}" step="100" data-price-input="max">
+                <input type="number" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" value="{{ page_max_price_display }}" step="1" data-price-input="max">
               </label>
             </div>
           </div>

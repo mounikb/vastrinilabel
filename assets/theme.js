@@ -372,9 +372,15 @@
     const absoluteMin = Number(root.dataset.minPrice || minRange.min || 0);
     const absoluteMax = Number(root.dataset.maxPrice || maxRange.max || 0);
 
+    const parseFieldValue = (field, fallback) => {
+      if (field.value === '') return fallback;
+      const parsed = Number(field.value);
+      return Number.isFinite(parsed) ? parsed : fallback;
+    };
+
     const syncBounds = () => {
-      let minValue = Number(minInput.value || absoluteMin);
-      let maxValue = Number(maxInput.value || absoluteMax);
+      let minValue = parseFieldValue(minInput, absoluteMin);
+      let maxValue = parseFieldValue(maxInput, absoluteMax);
 
       if (minValue < absoluteMin) minValue = absoluteMin;
       if (maxValue > absoluteMax) maxValue = absoluteMax;
@@ -409,9 +415,14 @@
       }
     };
 
-    [minRange, maxRange, minInput, maxInput].forEach((input) => {
+    [minRange, maxRange].forEach((input) => {
       input.addEventListener('input', applyFilter);
       input.addEventListener('change', applyFilter);
+    });
+
+    [minInput, maxInput].forEach((input) => {
+      input.addEventListener('change', applyFilter);
+      input.addEventListener('blur', applyFilter);
     });
 
     applyFilter();

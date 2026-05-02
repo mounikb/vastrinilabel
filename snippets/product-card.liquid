@@ -13,7 +13,7 @@
 -%}
 <article
   class="product-card"
-  data-price="{{ product.price }}"
+  data-price="{{ product.price | divided_by: 100 }}"
   data-product-title="{{ product.title | escape }}"
   data-product-url="{{ product_share_url }}"
 >
