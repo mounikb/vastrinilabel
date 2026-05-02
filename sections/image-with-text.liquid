@@ -1,37 +1,30 @@
 <section class="section features-section" style="background:{{ section.settings.bg_color }}">
-  <div class="page-width">
-    <div class="features-banner">
-      <div class="features-banner__story">
-        <div class="features-banner__intro">
-          {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-          <h2>{{ section.settings.heading }}</h2>
-          <div class="features-banner__copy">{{ section.settings.body }}</div>
-          {%- if section.settings.button_text != blank -%}
-            <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--primary">{{ section.settings.button_text }}</a>
-          {%- endif -%}
-        </div>
-      </div>
-      <div class="features-banner__rail" aria-label="Brand promises">
-        <article class="features-banner__point">
-          <span class="features-banner__index">01</span>
-          <div>
-            <strong>Curated quality</strong>
-            <p>Sharper edits, better finishing, and pieces selected for polish instead of volume.</p>
-          </div>
+  <div class="features-banner">
+    <div class="page-width">
+      <div class="features-banner__stats" aria-label="Brand promises">
+        <article class="features-stat">
+          <span class="features-stat__icon">{% render 'icon', icon: 'diamond' %}</span>
+          <strong>100%</strong>
+          <span class="features-stat__label">Handpicked quality</span>
+          <p>Every piece curated to perfection</p>
         </article>
-        <article class="features-banner__point">
-          <span class="features-banner__index">02</span>
-          <div>
-            <strong>Fast, clear delivery</strong>
-            <p>Reliable pan-India shipping with careful packing and fewer surprises after checkout.</p>
-          </div>
+        <article class="features-stat">
+          <span class="features-stat__icon">{% render 'icon', icon: 'truck' %}</span>
+          <strong>2-5 Days</strong>
+          <span class="features-stat__label">Pan-India delivery</span>
+          <p>Fast, insured &amp; tracked</p>
         </article>
-        <article class="features-banner__point">
-          <span class="features-banner__index">03</span>
-          <div>
-            <strong>Private client feel</strong>
-            <p>Support that helps with sizing, styling, and order guidance without sounding robotic.</p>
-          </div>
+        <article class="features-stat">
+          <span class="features-stat__icon">{% render 'icon', icon: 'shield' %}</span>
+          <strong>256-bit</strong>
+          <span class="features-stat__label">Secure checkout</span>
+          <p>Industry-leading encryption</p>
+        </article>
+        <article class="features-stat">
+          <span class="features-stat__icon">{% render 'icon', icon: 'headset' %}</span>
+          <strong>24/7</strong>
+          <span class="features-stat__label">Styling support</span>
+          <p>Real help, via WhatsApp</p>
         </article>
       </div>
     </div>
@@ -42,12 +35,6 @@
 {
   "name": "Features banner",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Editorial image" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why Vastrini" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "A softer luxury, built around ease." },
-    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>From refined silhouettes to attentive support, designed to feel polished, personal, and effortless to wear.</p>" },
-    { "type": "text", "id": "button_text", "label": "Button text", "default": "Explore collections" },
-    { "type": "url", "id": "button_link", "label": "Button link" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#F9F2EF" }
   ],
   "presets": [{ "name": "Features banner" }]
