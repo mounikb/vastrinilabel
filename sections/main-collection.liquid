@@ -37,20 +37,24 @@
             data-max-price="{{ page_max_price_display }}"
             data-results-label="{{ 'collections.general.items_with_count' | t: count: collection.products_count | escape }}"
           >
-            <span class="price-filter__label">Price range</span>
-            <div class="price-filter__sliders">
-              <input type="range" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" value="{{ page_min_price_display }}" step="1" data-price-range="min" aria-label="Minimum price">
-              <input type="range" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" value="{{ page_max_price_display }}" step="1" data-price-range="max" aria-label="Maximum price">
+            <div class="price-filter__head">
+              <span class="price-filter__label">Price</span>
+              <button type="button" class="price-filter__toggle" data-price-filter-toggle aria-expanded="true" aria-label="Toggle price filter">
+                {% render 'icon', icon: 'chevron-down' %}
+              </button>
             </div>
+            <div class="price-filter__body" data-price-filter-body>
+              <p class="price-filter__meta">The highest price is Rs. {{ page_max_price | money_without_currency }}.</p>
             <div class="price-filter__fields">
               <label>
-                <span>Min</span>
-                <input type="number" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" value="{{ page_min_price_display }}" step="1" data-price-input="min">
+                <span>Rs</span>
+                <input type="number" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" placeholder="From" step="1" data-price-input="min">
               </label>
               <label>
-                <span>Max</span>
-                <input type="number" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" value="{{ page_max_price_display }}" step="1" data-price-input="max">
+                <span class="visually-hidden">To</span>
+                <input type="number" min="{{ page_min_price_display }}" max="{{ page_max_price_display }}" placeholder="To" step="1" data-price-input="max">
               </label>
+            </div>
             </div>
           </div>
         {%- endif -%}

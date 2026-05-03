@@ -360,42 +360,41 @@
   function initPriceFilter(root) {
     const grid = document.querySelector('.product-grid--collection');
     const resultLabel = document.querySelector('[data-price-results]');
-    const minRange = root.querySelector('[data-price-range="min"]');
-    const maxRange = root.querySelector('[data-price-range="max"]');
     const minInput = root.querySelector('[data-price-input="min"]');
     const maxInput = root.querySelector('[data-price-input="max"]');
-    if (!grid || !minRange || !maxRange || !minInput || !maxInput) return;
+    const toggle = root.querySelector('[data-price-filter-toggle]');
+    const body = root.querySelector('[data-price-filter-body]');
+    if (!grid || !minInput || !maxInput) return;
 
     const cards = Array.from(grid.querySelectorAll('.product-card[data-price]'));
     if (!cards.length) return;
 
-    const absoluteMin = Number(root.dataset.minPrice || minRange.min || 0);
-    const absoluteMax = Number(root.dataset.maxPrice || maxRange.max || 0);
+    const absoluteMin = Number(root.dataset.minPrice || minInput.min || 0);
+    const absoluteMax = Number(root.dataset.maxPrice || maxInput.max || 0);
 
-    const parseFieldValue = (field, fallback) => {
-      if (field.value === '') return fallback;
+    const parseFieldValue = (field) => {
+      if (field.value === '') return null;
       const parsed = Number(field.value);
-      return Number.isFinite(parsed) ? parsed : fallback;
+      return Number.isFinite(parsed) ? parsed : null;
     };
 
     const syncBounds = () => {
-      let minValue = parseFieldValue(minInput, absoluteMin);
-      let maxValue = parseFieldValue(maxInput, absoluteMax);
+      let minValue = parseFieldValue(minInput);
+      let maxValue = parseFieldValue(maxInput);
 
-      if (minValue < absoluteMin) minValue = absoluteMin;
-      if (maxValue > absoluteMax) maxValue = absoluteMax;
-      if (minValue > maxValue) {
-        if (document.activeElement === minInput || document.activeElement === minRange) {
+      if (minValue !== null) minValue = Math.max(absoluteMin, Math.min(minValue, absoluteMax));
+      if (maxValue !== null) maxValue = Math.max(absoluteMin, Math.min(maxValue, absoluteMax));
+
+      if (minValue !== null && maxValue !== null && minValue > maxValue) {
+        if (document.activeElement === minInput) {
           maxValue = minValue;
+          maxInput.value = String(maxValue);
         } else {
           minValue = maxValue;
+          minInput.value = String(minValue);
         }
       }
 
-      minRange.value = minValue;
-      maxRange.value = maxValue;
-      minInput.value = minValue;
-      maxInput.value = maxValue;
       return { minValue, maxValue };
     };
 
@@ -405,7 +404,9 @@
 
       cards.forEach((card) => {
         const price = Number(card.dataset.price || 0);
-        const visible = price >= minValue && price <= maxValue;
+        const aboveMin = minValue === null || price >= minValue;
+        const belowMax = maxValue === null || price <= maxValue;
+        const visible = aboveMin && belowMax;
         card.hidden = !visible;
         if (visible) visibleCount += 1;
       });
@@ -415,15 +416,18 @@
       }
     };
 
-    [minRange, maxRange].forEach((input) => {
-      input.addEventListener('input', applyFilter);
-      input.addEventListener('change', applyFilter);
-    });
-
     [minInput, maxInput].forEach((input) => {
+      input.addEventListener('input', applyFilter);
       input.addEventListener('change', applyFilter);
       input.addEventListener('blur', applyFilter);
     });
+
+    if (toggle && body) {
+      toggle.addEventListener('click', () => {
+        const isOpen = root.classList.toggle('is-collapsed');
+        toggle.setAttribute('aria-expanded', String(!isOpen));
+      });
+    }
 
     applyFilter();
   }
