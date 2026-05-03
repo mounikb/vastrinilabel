@@ -1,6 +1,10 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
   assign requires_login = false
+  assign product_instagram_link = section.settings.instagram_link | default: settings.social_instagram_link | default: 'https://www.instagram.com/'
+  assign product_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
+  assign product_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
+  assign product_share_url = shop.url | append: product.url
   if shop.customer_accounts_enabled and customer == blank
     assign requires_login = true
   endif
@@ -98,17 +102,24 @@
         {%- if product.type != blank -%}<div>Type: {{ product.type }}</div>{%- endif -%}
       </div>
 
-      {%- if settings.social_instagram_link != blank or settings.social_facebook_link != blank or settings.social_youtube_link != blank -%}
+      <div class="product__share">
+        <span>Share</span>
+        <button type="button" class="product__share-action" data-share-page data-share-url="{{ product_share_url }}" data-share-title="{{ product.title | escape }}" aria-label="Share {{ product.title | escape }}">
+          {% render 'icon', icon: 'arrow-up-right' %}
+        </button>
+      </div>
+
+      {%- if product_instagram_link != blank or product_facebook_link != blank or product_youtube_link != blank -%}
         <div class="product__share">
           <span>Follow us</span>
-          {%- if settings.social_instagram_link != blank -%}
-            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>
+          {%- if product_instagram_link != blank -%}
+            <a href="{{ product_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>
           {%- endif -%}
-          {%- if settings.social_facebook_link != blank -%}
-            <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>
+          {%- if product_facebook_link != blank -%}
+            <a href="{{ product_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>
           {%- endif -%}
-          {%- if settings.social_youtube_link != blank -%}
-            <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>
+          {%- if product_youtube_link != blank -%}
+            <a href="{{ product_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -148,6 +159,10 @@
 {% schema %}
 {
   "name": "Product",
-  "settings": []
+  "settings": [
+    { "type": "url", "id": "instagram_link", "label": "Instagram link" },
+    { "type": "url", "id": "facebook_link", "label": "Facebook link" },
+    { "type": "url", "id": "youtube_link", "label": "YouTube link" }
+  ]
 }
 {% endschema %}

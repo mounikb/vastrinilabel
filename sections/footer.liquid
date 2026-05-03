@@ -1,4 +1,9 @@
 <footer class="site-footer">
+  {%- liquid
+    assign footer_instagram_link = section.settings.instagram_link | default: settings.social_instagram_link | default: 'https://www.instagram.com/'
+    assign footer_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
+    assign footer_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
+  -%}
   <div class="page-width">
     <div class="site-footer__grid">
       {%- assign block_count = section.blocks.size -%}
@@ -79,9 +84,9 @@
       <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
       <span class="site-footer__bottom-note">{{ section.settings.bottom_note }}</span>
       <div class="site-footer__social">
-        {%- if settings.social_facebook_link != blank -%}<a href="{{ settings.social_facebook_link }}" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>{%- endif -%}
-        {%- if settings.social_instagram_link != blank -%}<a href="{{ settings.social_instagram_link }}" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>{%- endif -%}
-        {%- if settings.social_youtube_link != blank -%}<a href="{{ settings.social_youtube_link }}" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>{%- endif -%}
+        {%- if footer_facebook_link != blank -%}<a href="{{ footer_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>{%- endif -%}
+        {%- if footer_instagram_link != blank -%}<a href="{{ footer_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>{%- endif -%}
+        {%- if footer_youtube_link != blank -%}<a href="{{ footer_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>{%- endif -%}
       </div>
     </div>
   </div>
@@ -93,6 +98,9 @@
   "max_blocks": 4,
   "settings": [
     { "type": "text", "id": "contact_email", "label": "Contact email", "default": "hello@vastrinilabel.com" },
+    { "type": "url", "id": "instagram_link", "label": "Instagram link" },
+    { "type": "url", "id": "facebook_link", "label": "Facebook link" },
+    { "type": "url", "id": "youtube_link", "label": "YouTube link" },
     { "type": "url", "id": "whatsapp_link", "label": "WhatsApp link" },
     { "type": "text", "id": "bottom_note", "label": "Bottom note", "default": "By continuing, I agree to our Privacy Policy and Terms of use" }
   ],

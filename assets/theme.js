@@ -121,6 +121,12 @@
       if (!shareButton) return;
       await handleProductShare(event, shareButton);
     });
+
+    document.addEventListener('click', async (event) => {
+      const shareButton = event.target.closest('[data-share-page]');
+      if (!shareButton) return;
+      await handleDirectShare(event, shareButton);
+    });
   });
 
   function closeDropdowns(except) {
@@ -408,6 +414,7 @@
         const belowMax = maxValue === null || price <= maxValue;
         const visible = aboveMin && belowMax;
         card.hidden = !visible;
+        card.style.display = visible ? '' : 'none';
         if (visible) visibleCount += 1;
       });
 
@@ -446,14 +453,54 @@
     try {
       if (navigator.share) {
         await navigator.share({ title: shareTitle, url: shareUrl });
-      } else if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(shareUrl);
-        button.classList.add('is-copied');
-        window.setTimeout(() => button.classList.remove('is-copied'), 1600);
       } else {
-        window.open(shareUrl, '_blank', 'noopener');
+        await copyText(shareUrl);
+        markShareSuccess(button);
       }
     } catch (error) {}
+  }
+
+  async function handleDirectShare(event, button) {
+    event.preventDefault();
+    const shareUrl = button.dataset.shareUrl;
+    const shareTitle = button.dataset.shareTitle || document.title;
+    if (!shareUrl) return;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: shareTitle, url: shareUrl });
+      } else {
+        await copyText(shareUrl);
+        markShareSuccess(button);
+      }
+    } catch (error) {}
+  }
+
+  async function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const helper = document.createElement('textarea');
+    helper.value = text;
+    helper.setAttribute('readonly', '');
+    helper.style.position = 'absolute';
+    helper.style.left = '-9999px';
+    document.body.appendChild(helper);
+    helper.select();
+    document.execCommand('copy');
+    document.body.removeChild(helper);
+  }
+
+  function markShareSuccess(button) {
+    button.classList.add('is-copied');
+    const originalLabel = button.getAttribute('aria-label');
+    button.setAttribute('aria-label', 'Link copied');
+    window.setTimeout(() => {
+      button.classList.remove('is-copied');
+      if (originalLabel) button.setAttribute('aria-label', originalLabel);
+    }, 1600);
   }
 
   function initQty(root) {
