@@ -78,11 +78,15 @@
 
         {%- for link in section.settings.menu.links -%}
           {%- assign link_title_key = link.title | strip | downcase -%}
-          {%- unless link_title_key == 'home' or link_title_key == 'catalog' or link_title_key == 'new arrivals' or link_title_key == 'about us' -%}
-            {%- if link.links != blank -%}
+        {%- unless link_title_key == 'home' or link_title_key == 'catalog' or link_title_key == 'new arrivals' or link_title_key == 'about us' -%}
+          {%- assign link_label = link.title -%}
+          {%- if link_title_key == 'contact' -%}
+            {%- assign link_label = 'Contact Us' -%}
+          {%- endif -%}
+          {%- if link.links != blank -%}
               <div class="site-header__nav-item site-header__nav-item--dropdown" data-dropdown>
                 <button type="button" class="site-header__nav-link" data-dropdown-toggle aria-expanded="false">
-                  <span>{{ link.title }}</span>
+                  <span>{{ link_label }}</span>
                   {% render 'icon', icon: 'chevron-down' %}
                 </button>
                 <div class="site-header__dropdown">
@@ -92,7 +96,7 @@
                 </div>
               </div>
             {%- else -%}
-              <a href="{{ link.url }}" class="site-header__nav-link">{{ link.title }}</a>
+              <a href="{{ link.url }}" class="site-header__nav-link">{{ link_label }}</a>
             {%- endif -%}
           {%- endunless -%}
         {%- endfor -%}
@@ -152,10 +156,14 @@
     {%- for link in section.settings.menu.links -%}
       {%- assign link_title_key = link.title | strip | downcase -%}
       {%- unless link_title_key == 'home' or link_title_key == 'catalog' or link_title_key == 'new arrivals' or link_title_key == 'about us' -%}
+        {%- assign link_label = link.title -%}
+        {%- if link_title_key == 'contact' -%}
+          {%- assign link_label = 'Contact Us' -%}
+        {%- endif -%}
         <li>
           {%- if link.links != blank -%}
             <details class="mobile-drawer__group">
-              <summary>{{ link.title }}</summary>
+              <summary>{{ link_label }}</summary>
               <div class="mobile-drawer__subnav">
                 {%- for child_link in link.links -%}
                   <a href="{{ child_link.url }}">{{ child_link.title }}</a>
@@ -163,7 +171,7 @@
               </div>
             </details>
           {%- else -%}
-            <a href="{{ link.url }}">{{ link.title }}</a>
+            <a href="{{ link.url }}">{{ link_label }}</a>
           {%- endif -%}
         </li>
       {%- endunless -%}

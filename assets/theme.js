@@ -14,6 +14,13 @@
   let shareModalOpen;
   let sharePayload = null;
 
+  function bindDrawerCloseButtons(drawer) {
+    if (!drawer) return;
+    drawer.querySelectorAll('[data-close]').forEach((closeButton) =>
+      closeButton.addEventListener('click', () => closeDrawers())
+    );
+  }
+
   function bindDrawerToggle(triggerSel, drawerSel) {
     const triggers = document.querySelectorAll(triggerSel);
     const drawer = document.querySelector(drawerSel);
@@ -22,9 +29,7 @@
       drawer.classList.add('is-open');
       syncOverlayState();
     }));
-    drawer.querySelectorAll('[data-close]').forEach((closeButton) =>
-      closeButton.addEventListener('click', () => closeDrawers())
-    );
+    bindDrawerCloseButtons(drawer);
   }
 
   function closeDrawers() {
@@ -134,6 +139,12 @@
       const shareButton = event.target.closest('[data-share-page]');
       if (!shareButton) return;
       openShareModalFromButton(event, shareButton);
+    });
+
+    document.addEventListener('click', (event) => {
+      const scrollTopButton = event.target.closest('[data-scroll-top]');
+      if (!scrollTopButton) return;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   });
 
@@ -293,21 +304,82 @@
 
   async function refreshCart() {
     try {
-      const sectionResponse = await fetch('/?section_id=cart-drawer');
-      const html = await sectionResponse.text();
-      const temp = document.createElement('div');
-      temp.innerHTML = html;
-      const freshDrawer = temp.querySelector('.cart-drawer');
-      const currentDrawer = document.querySelector('.cart-drawer');
-      if (freshDrawer && currentDrawer) currentDrawer.innerHTML = freshDrawer.innerHTML;
-
       const cartResponse = await fetch('/cart.js');
       const cart = await cartResponse.json();
+      const currentDrawer = document.querySelector('.cart-drawer');
+      if (currentDrawer) {
+        currentDrawer.innerHTML = renderCartDrawerMarkup(cart);
+        bindDrawerCloseButtons(currentDrawer);
+      }
       document.querySelectorAll('[data-cart-count]').forEach((element) => {
         element.textContent = cart.item_count;
         element.style.display = cart.item_count > 0 ? '' : 'none';
       });
     } catch (error) {}
+  }
+
+  function renderCartDrawerMarkup(cart) {
+    const drawerTitle = 'Cart';
+    const subtotalText = 'Subtotal';
+    const shippingText = 'Shipping and taxes calculated at checkout.';
+    const viewCartText = 'View cart';
+    const checkoutText = 'Checkout';
+    const removeText = 'Remove';
+    const emptyText = 'Your cart is empty.';
+    const continueText = 'Continue shopping';
+
+    if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
+      return `
+        <div class="cart-drawer__head">
+          <h3>${drawerTitle}</h3>
+          <button data-close aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+        <div class="cart-empty" style="padding:32px 0">
+          <p>${emptyText}</p>
+          <a href="/collections/all" class="btn btn--primary">${continueText}</a>
+        </div>
+      `;
+    }
+
+    const itemsMarkup = cart.items.map((item) => {
+      const imageUrl = item.image || item.featured_image?.url || '';
+      const variantTitle = item.variant_title && item.variant_title !== 'Default Title'
+        ? `<div style="color:var(--color-muted);font-size:.78rem">${escapeHtml(item.variant_title)}</div>`
+        : '';
+
+      return `
+        <div class="cart-drawer__row">
+          <a href="${item.url}">
+            ${imageUrl ? `<img src="${imageUrl}" alt="${escapeHtml(item.product_title)}" width="70" height="93" loading="lazy">` : ''}
+          </a>
+          <div>
+            <a href="${item.url}"><strong>${escapeHtml(item.product_title)}</strong></a>
+            ${variantTitle}
+            <div style="margin-top:6px">${formatMoney(item.final_price)} x ${item.quantity}</div>
+            <a href="#" data-cart-remove="${item.key}" style="font-size:.75rem;color:var(--color-muted);text-decoration:underline">${removeText}</a>
+          </div>
+          <div>${formatMoney(item.final_line_price)}</div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="cart-drawer__head">
+        <h3>${drawerTitle}</h3>
+        <button data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+      </div>
+      <div class="cart-drawer__items">${itemsMarkup}</div>
+      <div class="cart-drawer__foot">
+        <div class="row"><span>${subtotalText}</span><span>${formatMoney(cart.total_price)}</span></div>
+        <p style="font-size:.78rem;color:var(--color-muted);margin:0 0 14px">${shippingText}</p>
+        <a href="/cart" class="btn btn--secondary btn--block" style="margin-bottom:8px">${viewCartText}</a>
+        <a href="/checkout" class="btn btn--primary btn--block">${checkoutText}</a>
+      </div>
+    `;
   }
 
   async function updateLine(key, quantity) {
@@ -548,6 +620,15 @@
     helper.select();
     document.execCommand('copy');
     document.body.removeChild(helper);
+  }
+
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function flashShareButton(button, label) {

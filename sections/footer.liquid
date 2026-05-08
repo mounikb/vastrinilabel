@@ -1,92 +1,87 @@
-<footer class="site-footer">
-  {%- liquid
-    assign footer_instagram_link = section.settings.instagram_link | default: settings.social_instagram_link | default: 'https://www.instagram.com/'
-    assign footer_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
-    assign footer_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
-  -%}
+{%- liquid
+  assign footer_instagram_link = section.settings.instagram_link | default: settings.social_instagram_link | default: 'https://www.instagram.com/'
+  assign footer_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
+  assign footer_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
+-%}
+
+<footer class="site-footer site-footer--editorial">
   <div class="page-width">
-    <div class="site-footer__grid">
-      {%- assign block_count = section.blocks.size -%}
-      {%- for block in section.blocks -%}
-        <div class="site-footer__col" {{ block.shopify_attributes }}>
-          <h4>{{ block.settings.heading }}</h4>
-          {%- if block.type == 'menu' and block.settings.menu.links.size > 0 -%}
-            <ul>
-              {%- for link in block.settings.menu.links -%}
-                {%- assign footer_link_title = link.title | strip | downcase -%}
-                {%- unless footer_link_title contains 'store locator' or footer_link_title contains 'timing' or footer_link_title contains 'career' -%}
-                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-                {%- endunless -%}
-              {%- endfor -%}
-            </ul>
-          {%- else -%}
-            <div class="site-footer__text">{{ block.settings.body }}</div>
-          {%- endif -%}
-        </div>
-      {%- endfor -%}
-
-      {%- if block_count < 1 -%}
-        <div class="site-footer__col">
-          <h4>Customer care</h4>
-          <ul>
-            <li><a href="/pages/shipping-policy">Orders &amp; shipment</a></li>
-            <li><a href="/pages/returns-refunds">Returns &amp; exchange</a></li>
-            <li><a href="/pages/contact">Contact us</a></li>
-            <li><a href="/pages/faqs">FAQs</a></li>
-          </ul>
-        </div>
-      {%- endif -%}
-      {%- if block_count < 2 -%}
-        <div class="site-footer__col">
-          <h4>About us</h4>
-          <ul>
-            <li><a href="/pages/about">Our story</a></li>
-          </ul>
-        </div>
-      {%- endif -%}
-      {%- if block_count < 3 -%}
-        <div class="site-footer__col">
-          <h4>Categories</h4>
-          <ul>
-            <li><a href="/collections/all">Women</a></li>
-            <li><a href="/collections/new-arrivals">New arrivals</a></li>
-            <li><a href="/collections/best-sellers">Best sellers</a></li>
-          </ul>
-        </div>
-      {%- endif -%}
-      {%- if block_count < 4 -%}
-        <div class="site-footer__col">
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="/policies/privacy-policy">Privacy policy</a></li>
-            <li><a href="/policies/terms-of-service">Terms &amp; conditions</a></li>
-            <li><a href="/policies/shipping-policy">Shipping policy</a></li>
-            <li><a href="/policies/refund-policy">Returns &amp; refunds</a></li>
-          </ul>
-        </div>
-      {%- endif -%}
-
-      <div class="site-footer__help">
-        <h4>Need help?</h4>
-        <ul class="site-footer__help-list">
+    <div class="site-footer__layout">
+      <div class="site-footer__brand">
+        <div class="site-footer__contact-lines">
           {%- if section.settings.contact_email != blank -%}
-            <li><a href="mailto:{{ section.settings.contact_email }}">{% render 'icon', icon: 'mail' %}<span>Email us</span></a></li>
+            <p>Email: <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></p>
           {%- endif -%}
-          {%- if section.settings.whatsapp_link != blank -%}
-            <li><a href="{{ section.settings.whatsapp_link }}">{% render 'icon', icon: 'whatsapp' %}<span>WhatsApp us</span></a></li>
+          {%- if section.settings.whatsapp_number != blank -%}
+            <p>Whatsapp: <a href="{{ section.settings.whatsapp_link | default: '#' }}">{{ section.settings.whatsapp_number }}</a></p>
           {%- endif -%}
-          <li><a href="/pages/contact">{% render 'icon', icon: 'arrow-up-right' %}<span>Contact us</span></a></li>
+        </div>
+
+        <a href="{{ section.settings.contact_page | default: '/pages/contact' }}" class="site-footer__contact-cta">
+          <span>Contact Us</span>
+          {% render 'icon', icon: 'arrow-up-right' %}
+        </a>
+
+        <div class="site-footer__social">
+          <a href="{{ footer_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>
+          <a href="{{ footer_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>
+          <a href="{{ footer_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>
+        </div>
+      </div>
+
+      <div class="site-footer__menu-col">
+        <h4>{{ section.settings.help_heading }}</h4>
+        <ul>
+          {%- for link in section.settings.help_menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
         </ul>
+      </div>
+
+      <div class="site-footer__menu-col">
+        <h4>{{ section.settings.quick_links_heading }}</h4>
+        <ul>
+          {%- for link in section.settings.quick_links_menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="site-footer__newsletter">
+        <h4>{{ section.settings.newsletter_heading }}</h4>
+        <p>{{ section.settings.newsletter_text }}</p>
+        {%- form 'customer', class: 'site-footer__newsletter-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input
+            type="email"
+            name="contact[email]"
+            class="site-footer__newsletter-input"
+            placeholder="Enter email address"
+            value="{% if form.email %}{{ form.email }}{% endif %}"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+          >
+          <button type="submit" class="site-footer__newsletter-button">
+            <span>Subscribe</span>
+            {% render 'icon', icon: 'arrow-up-right' %}
+          </button>
+        {%- endform -%}
+        <div class="site-footer__meta-row">
+          <span class="site-footer__currency">INR</span>
+          <button type="button" class="site-footer__backtotop" data-scroll-top aria-label="Back to top">
+            {% render 'icon', icon: 'arrow-up-right' %}
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="site-footer__bottom">
-      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
-      <span class="site-footer__bottom-note">{{ section.settings.bottom_note }}</span>
-      <div class="site-footer__social">
-        {%- if footer_facebook_link != blank -%}<a href="{{ footer_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>{%- endif -%}
-        {%- if footer_instagram_link != blank -%}<a href="{{ footer_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>{%- endif -%}
-        {%- if footer_youtube_link != blank -%}<a href="{{ footer_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>{%- endif -%}
+    <div class="site-footer__bottomline">
+      <span>&copy; {{ shop.name }} {{ 'now' | date: '%Y' }}</span>
+      <div class="site-footer__payments">
+        {%- for type in shop.enabled_payment_types -%}
+          <span class="site-footer__payment-icon">{{ type | payment_type_svg_tag }}</span>
+        {%- endfor -%}
       </div>
     </div>
   </div>
@@ -95,40 +90,20 @@
 {% schema %}
 {
   "name": "Footer",
-  "max_blocks": 4,
   "settings": [
-    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "hello@vastrinilabel.com" },
+    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "vastarathelabel@gmail.com" },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "default": "+91 6380 734 120" },
+    { "type": "url", "id": "whatsapp_link", "label": "WhatsApp link" },
     { "type": "url", "id": "instagram_link", "label": "Instagram link" },
     { "type": "url", "id": "facebook_link", "label": "Facebook link" },
     { "type": "url", "id": "youtube_link", "label": "YouTube link" },
-    { "type": "url", "id": "whatsapp_link", "label": "WhatsApp link" },
-    { "type": "text", "id": "bottom_note", "label": "Bottom note", "default": "By continuing, I agree to our Privacy Policy and Terms of use" }
-  ],
-  "blocks": [
-    {
-      "type": "menu",
-      "name": "Menu",
-      "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
-        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
-      ]
-    },
-    {
-      "type": "text",
-      "name": "Text block",
-      "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Help" },
-        { "type": "richtext", "id": "body", "label": "Body" }
-      ]
-    }
-  ],
-  "default": {
-    "settings": {},
-    "blocks": [
-      { "type": "menu", "settings": { "heading": "Shop" } },
-      { "type": "menu", "settings": { "heading": "Help" } },
-      { "type": "menu", "settings": { "heading": "Company" } }
-    ]
-  }
+    { "type": "page", "id": "contact_page", "label": "Contact page" },
+    { "type": "text", "id": "help_heading", "label": "Help heading", "default": "Help" },
+    { "type": "link_list", "id": "help_menu", "label": "Help menu", "default": "footer" },
+    { "type": "text", "id": "quick_links_heading", "label": "Quick links heading", "default": "Quick Links" },
+    { "type": "link_list", "id": "quick_links_menu", "label": "Quick links menu", "default": "main-menu" },
+    { "type": "text", "id": "newsletter_heading", "label": "Newsletter heading", "default": "Sign Up for Email" },
+    { "type": "textarea", "id": "newsletter_text", "label": "Newsletter text", "default": "Sign up to get first dibs on new arrivals, sales, exclusive content, events and more!" }
+  ]
 }
 {% endschema %}
