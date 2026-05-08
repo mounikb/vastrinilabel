@@ -1,13 +1,9 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
-  assign requires_login = false
   assign product_instagram_link = section.settings.instagram_link | default: settings.social_instagram_link | default: 'https://www.instagram.com/'
   assign product_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
   assign product_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
   assign product_share_url = shop.url | append: product.url
-  if shop.customer_accounts_enabled and customer == blank
-    assign requires_login = true
-  endif
 -%}
 <div class="page-width">
   <div class="product">
@@ -80,17 +76,9 @@
           </div>
         </div>
 
-        {%- if requires_login -%}
-          <button type="button" class="btn btn--primary btn--block btn--lg" data-open-login-modal>Sign in to shop</button>
-          <div class="product__login-inline-note">
-            <strong>Members-only checkout</strong>
-            <span>Sign in to add this item to cart, keep your profile synced, and move faster through checkout.</span>
-          </div>
-        {%- else -%}
-          <button type="submit" class="btn btn--primary btn--block btn--lg" data-add-text="{{ 'products.product.add_to_cart' | t }}" data-sold-text="{{ 'products.product.sold_out' | t }}" {% unless current_variant.available %}disabled{% endunless %}>
-            {%- if current_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
-          </button>
-        {%- endif -%}
+        <button type="submit" class="btn btn--primary btn--block btn--lg" data-add-text="{{ 'products.product.add_to_cart' | t }}" data-sold-text="{{ 'products.product.sold_out' | t }}" {% unless current_variant.available %}disabled{% endunless %}>
+          {%- if current_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+        </button>
       </form>
 
       {%- if product.description != blank -%}
@@ -126,23 +114,6 @@
       </div>
     </div>
   </div>
-
-  {%- if requires_login -%}
-    <div class="site-modal product-login-modal" data-login-modal aria-hidden="true">
-      <div class="site-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="ProductLoginTitle">
-        <button type="button" class="site-modal__close" data-close-modal aria-label="Close">
-          {% render 'icon', icon: 'close' %}
-        </button>
-        <span class="site-modal__eyebrow">Members access</span>
-        <h3 id="ProductLoginTitle">Sign in to add this item to your cart</h3>
-        <p>Your profile, cart, and checkout will stay connected after login so shopping feels effortless across every visit.</p>
-        <div class="site-modal__actions">
-          <a href="{{ routes.account_login_url }}?return_url={{ product.url | url_encode }}" class="btn btn--primary btn--lg">Sign in</a>
-          <a href="{{ routes.account_register_url }}?return_url={{ product.url | url_encode }}" class="btn btn--secondary btn--lg">Create account</a>
-        </div>
-      </div>
-    </div>
-  {%- endif -%}
 
   {%- if recommendations.products_count > 0 or recommendations.performed? == false -%}
     <section class="section">
