@@ -1,8 +1,29 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "footer",
   "name": "Footer group",
   "sections": {
-    "footer": { "type": "footer" }
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "contact_email": "hello@vastrinilabel.com",
+        "instagram_link": "https://www.instagram.com/vastrini.label?utm_source=qr&igsh=NDI5OXRqaXZrZHds",
+        "facebook_link": "https://www.facebook.com/share/1Desp6y6D8/",
+        "youtube_link": "https://youtube.com/@vastrinilabel?si=TgNVBdSzVjXWa014",
+        "whatsapp_link": "",
+        "bottom_note": "By continuing, I agree to our Privacy Policy and Terms of use"
+      }
+    }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }
