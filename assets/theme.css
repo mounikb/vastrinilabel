@@ -296,6 +296,12 @@ button.site-header__nav-link{background:transparent;border:0}
 .product__share{margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--color-muted)}
 .product__share a,.product__share-action{display:inline-flex;color:var(--color-text);width:38px;height:38px;border-radius:999px;align-items:center;justify-content:center;background:rgba(141,35,69,.08);transition:background .2s ease,color .2s ease,transform .2s ease}
 .product__share a:hover,.product__share-action:hover,.product__share-action.is-copied{background:var(--color-primary);color:#fff;transform:translateY(-1px)}
+.share-modal__dialog{max-width:560px}
+.share-modal__text{margin:0 0 16px;color:#64555b;line-height:1.75}
+.share-modal__url{padding:14px 16px;border-radius:18px;background:rgba(141,35,69,.06);border:1px solid rgba(136,58,76,.12);font-size:.9rem;line-height:1.65;color:#3f3237;word-break:break-all}
+.share-modal__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.share-modal__open-link{margin-top:16px;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-primary);font-weight:700}
+.share-modal__open-link:hover{color:#5e1830}
 
 /* Modal */
 .site-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:210}

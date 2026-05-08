@@ -6,6 +6,13 @@
   const overlay = document.createElement('div');
   overlay.className = 'overlay';
   document.body.appendChild(overlay);
+  let shareModal;
+  let shareModalTitle;
+  let shareModalUrl;
+  let shareModalNative;
+  let shareModalCopy;
+  let shareModalOpen;
+  let sharePayload = null;
 
   function bindDrawerToggle(triggerSel, drawerSel) {
     const triggers = document.querySelectorAll(triggerSel);
@@ -57,6 +64,7 @@
     bindDrawerToggle('[data-open-cart]', '.cart-drawer');
     initDropdowns();
     initModals();
+    initShareModal();
 
     /* -------- Hero slideshow -------- */
     document.querySelectorAll('[data-hero]').forEach(initHero);
@@ -119,13 +127,13 @@
     document.addEventListener('click', async (event) => {
       const shareButton = event.target.closest('[data-share-product]');
       if (!shareButton) return;
-      await handleProductShare(event, shareButton);
+      openShareModalFromButton(event, shareButton, shareButton.closest('.product-card'));
     });
 
     document.addEventListener('click', async (event) => {
       const shareButton = event.target.closest('[data-share-page]');
       if (!shareButton) return;
-      await handleDirectShare(event, shareButton);
+      openShareModalFromButton(event, shareButton);
     });
   });
 
@@ -188,6 +196,92 @@
     loginModal.querySelectorAll('[data-close-modal]').forEach((button) => {
       button.addEventListener('click', closeModals);
     });
+  }
+
+  function initShareModal() {
+    const modal = document.createElement('div');
+    modal.className = 'site-modal share-modal';
+    modal.setAttribute('data-share-modal', '');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.innerHTML = `
+      <div class="site-modal__dialog share-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="ShareModalTitle">
+        <button type="button" class="site-modal__close" data-close-modal aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+        <span class="site-modal__eyebrow">Share this piece</span>
+        <h3 id="ShareModalTitle">Product</h3>
+        <p class="share-modal__text">Send this link anywhere you like, or copy it for later.</p>
+        <div class="share-modal__url" data-share-modal-url></div>
+        <div class="share-modal__actions">
+          <button type="button" class="btn btn--primary btn--lg" data-share-modal-native>Share now</button>
+          <button type="button" class="btn btn--secondary btn--lg" data-share-modal-copy>Copy link</button>
+        </div>
+        <button type="button" class="share-modal__open-link" data-share-modal-open>Open product page</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    shareModal = modal;
+    shareModalTitle = modal.querySelector('#ShareModalTitle');
+    shareModalUrl = modal.querySelector('[data-share-modal-url]');
+    shareModalNative = modal.querySelector('[data-share-modal-native]');
+    shareModalCopy = modal.querySelector('[data-share-modal-copy]');
+    shareModalOpen = modal.querySelector('[data-share-modal-open]');
+
+    modal.querySelectorAll('[data-close-modal]').forEach((button) => {
+      button.addEventListener('click', closeModals);
+    });
+
+    shareModalNative.addEventListener('click', async () => {
+      if (!sharePayload) return;
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: sharePayload.title, url: sharePayload.url });
+          closeModals();
+        } else {
+          await copyText(sharePayload.url);
+          flashShareButton(shareModalCopy, 'Link copied');
+        }
+      } catch (error) {}
+    });
+
+    shareModalCopy.addEventListener('click', async () => {
+      if (!sharePayload) return;
+      try {
+        await copyText(sharePayload.url);
+        flashShareButton(shareModalCopy, 'Link copied');
+      } catch (error) {}
+    });
+
+    shareModalOpen.addEventListener('click', () => {
+      if (!sharePayload) return;
+      window.open(sharePayload.url, '_blank', 'noopener');
+    });
+  }
+
+  function openShareModalFromButton(event, button, card) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const source = card || button;
+    const shareUrl = source?.dataset.productUrl || button.dataset.shareUrl;
+    const shareTitle = source?.dataset.productTitle || button.dataset.shareTitle || document.title;
+    if (!shareUrl || !shareModal) return;
+
+    sharePayload = {
+      title: shareTitle,
+      url: shareUrl
+    };
+
+    shareModalTitle.textContent = shareTitle;
+    shareModalUrl.textContent = shareUrl;
+    shareModalNative.textContent = navigator.share ? 'Share now' : 'Quick share';
+    shareModalCopy.textContent = 'Copy link';
+    shareModalOpen.textContent = 'Open product page';
+
+    shareModal.classList.add('is-open');
+    shareModal.setAttribute('aria-hidden', 'false');
+    syncOverlayState();
   }
 
   function openCartDrawer() {
@@ -439,43 +533,6 @@
     applyFilter();
   }
 
-  async function handleProductShare(event, button) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const card = button.closest('.product-card');
-    if (!card) return;
-
-    const shareUrl = card.dataset.productUrl;
-    const shareTitle = card.dataset.productTitle || document.title;
-    if (!shareUrl) return;
-
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: shareTitle, url: shareUrl });
-      } else {
-        await copyText(shareUrl);
-        markShareSuccess(button);
-      }
-    } catch (error) {}
-  }
-
-  async function handleDirectShare(event, button) {
-    event.preventDefault();
-    const shareUrl = button.dataset.shareUrl;
-    const shareTitle = button.dataset.shareTitle || document.title;
-    if (!shareUrl) return;
-
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: shareTitle, url: shareUrl });
-      } else {
-        await copyText(shareUrl);
-        markShareSuccess(button);
-      }
-    } catch (error) {}
-  }
-
   async function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(text);
@@ -493,13 +550,13 @@
     document.body.removeChild(helper);
   }
 
-  function markShareSuccess(button) {
+  function flashShareButton(button, label) {
     button.classList.add('is-copied');
-    const originalLabel = button.getAttribute('aria-label');
-    button.setAttribute('aria-label', 'Link copied');
+    const originalText = button.textContent;
+    button.textContent = label;
     window.setTimeout(() => {
       button.classList.remove('is-copied');
-      if (originalLabel) button.setAttribute('aria-label', originalLabel);
+      button.textContent = originalText;
     }, 1600);
   }
 
