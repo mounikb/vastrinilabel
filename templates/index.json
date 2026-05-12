@@ -15,7 +15,7 @@
         "s1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Screenshot_2026-04-23_140720.png",
+            "image": "shopify://shop_images/IMG-20260510-WA0000_jpg.jpg",
             "alt": "Editorial hero slide one",
             "link": "/collections/all"
           }
@@ -23,7 +23,7 @@
         "s2": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Screenshot_2026-04-21_062335.png",
+            "image": "shopify://shop_images/IMG-20260510-WA0001_jpg.jpg",
             "alt": "Editorial hero slide two",
             "link": "/collections/all"
           }
