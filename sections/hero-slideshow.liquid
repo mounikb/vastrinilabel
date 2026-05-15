@@ -2,7 +2,11 @@
   <div class="hero__slides">
     {%- for block in section.blocks -%}
       {%- assign slide_link = block.settings.link | default: block.settings.button_link -%}
-      <div class="hero__slide" {{ block.shopify_attributes }}>
+      <div
+        class="hero__slide"
+        {% if block.settings.asset_image != blank %}style="--hero-backdrop:url('{{ block.settings.asset_image | asset_url }}')"{% endif %}
+        {{ block.shopify_attributes }}
+      >
         {%- if slide_link != blank -%}
           <a class="hero__slide-link" href="{{ slide_link }}" aria-label="{{ block.settings.alt | default: shop.name | escape }}">
         {%- else -%}
