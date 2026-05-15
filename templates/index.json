@@ -15,18 +15,16 @@
         "s1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Screenshot_2026-04-23_140720_64ccc981-608e-4607-8c53-af4c62339c86.png",
-            "asset_image": "hero-rooted-tradition.png",
-            "alt": "Rooted in tradition made for you hero slide",
+            "image": "shopify://shop_images/ChatGPT_Image_May_15_2026_04_31_35_PM_167de839-1ae5-435a-89c1-99478ef88688.png",
+            "alt": "Editorial hero slide one",
             "link": "/collections/all"
           }
         },
         "s2": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_May_16_2026_12_34_48_AM.png",
-            "asset_image": "hero-own-spotlight.png",
-            "alt": "Own the spotlight hero slide",
+            "image": "shopify://shop_images/ChatGPT_Image_May_15_2026_04_25_30_PM_eff3b82a-6a32-4e4d-86ae-5202c8c50ca5.png",
+            "alt": "Editorial hero slide two",
             "link": "/collections/all"
           }
         }
