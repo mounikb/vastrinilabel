@@ -2,6 +2,10 @@
   assign footer_instagram_link = section.settings.instagram_link | default: settings.social_instagram_link | default: 'https://www.instagram.com/'
   assign footer_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
   assign footer_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
+  assign footer_contact_url = '/pages/contact'
+  if section.settings.contact_page != blank
+    assign footer_contact_url = section.settings.contact_page.url
+  endif
 -%}
 
 <footer class="site-footer site-footer--editorial">
@@ -17,15 +21,15 @@
           {%- endif -%}
         </div>
 
-        <a href="{{ section.settings.contact_page | default: '/pages/contact' }}" class="site-footer__contact-cta">
+        <a href="{{ footer_contact_url }}" class="site-footer__contact-cta">
           <span>Contact Us</span>
           {% render 'icon', icon: 'arrow-up-right' %}
         </a>
 
         <div class="site-footer__social">
-          <a href="{{ footer_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>
-          <a href="{{ footer_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>
-          <a href="{{ footer_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>
+          <a href="{{ footer_facebook_link }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>
+          <a href="{{ footer_instagram_link }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>
+          <a href="{{ footer_youtube_link }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>
         </div>
       </div>
 

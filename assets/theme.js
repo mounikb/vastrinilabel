@@ -351,14 +351,14 @@
 
       return `
         <div class="cart-drawer__row">
-          <a href="${item.url}">
-            ${imageUrl ? `<img src="${imageUrl}" alt="${escapeHtml(item.product_title)}" width="70" height="93" loading="lazy">` : ''}
+          <a href="${escapeHtml(item.url)}">
+            ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(item.product_title)}" width="70" height="93" loading="lazy">` : ''}
           </a>
           <div>
-            <a href="${item.url}"><strong>${escapeHtml(item.product_title)}</strong></a>
+            <a href="${escapeHtml(item.url)}"><strong>${escapeHtml(item.product_title)}</strong></a>
             ${variantTitle}
             <div style="margin-top:6px">${formatMoney(item.final_price)} x ${item.quantity}</div>
-            <a href="#" data-cart-remove="${item.key}" style="font-size:.75rem;color:var(--color-muted);text-decoration:underline">${removeText}</a>
+            <a href="#" data-cart-remove="${escapeHtml(item.key)}" style="font-size:.75rem;color:var(--color-muted);text-decoration:underline">${removeText}</a>
           </div>
           <div>${formatMoney(item.final_line_price)}</div>
         </div>

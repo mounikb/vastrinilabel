@@ -36,6 +36,11 @@
     assign new_arrivals_tag = new_arrivals_key | handle
     assign new_arrivals_url = routes.all_products_collection_url | append: '/' | append: new_arrivals_tag
   endif
+
+  assign about_url = '/pages/about'
+  if section.settings.about_page != blank
+    assign about_url = section.settings.about_page.url
+  endif
 -%}
 
 <header class="site-header">
@@ -74,7 +79,7 @@
         </div>
 
         <a href="{{ new_arrivals_url }}" class="site-header__nav-link">New Arrivals</a>
-        <a href="{{ section.settings.about_page | default: '/pages/about' }}" class="site-header__nav-link">About Us</a>
+        <a href="{{ about_url }}" class="site-header__nav-link">About Us</a>
 
         {%- for link in section.settings.menu.links -%}
           {%- assign link_title_key = link.title | strip | downcase -%}
@@ -152,7 +157,7 @@
       </details>
     </li>
     <li><a href="{{ new_arrivals_url }}">New Arrivals</a></li>
-    <li><a href="{{ section.settings.about_page | default: '/pages/about' }}">About Us</a></li>
+    <li><a href="{{ about_url }}">About Us</a></li>
     {%- for link in section.settings.menu.links -%}
       {%- assign link_title_key = link.title | strip | downcase -%}
       {%- unless link_title_key == 'home' or link_title_key == 'catalog' or link_title_key == 'new arrivals' or link_title_key == 'about us' -%}

@@ -101,13 +101,13 @@
         <div class="product__share">
           <span>Follow us</span>
           {%- if product_instagram_link != blank -%}
-            <a href="{{ product_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>
+            <a href="{{ product_instagram_link }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">{% render 'icon', icon: 'instagram' %}</a>
           {%- endif -%}
           {%- if product_facebook_link != blank -%}
-            <a href="{{ product_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>
+            <a href="{{ product_facebook_link }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">{% render 'icon', icon: 'facebook' %}</a>
           {%- endif -%}
           {%- if product_youtube_link != blank -%}
-            <a href="{{ product_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>
+            <a href="{{ product_youtube_link }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube">{% render 'icon', icon: 'youtube' %}</a>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -115,7 +115,7 @@
     </div>
   </div>
 
-  {%- if recommendations.products_count > 0 or recommendations.performed? == false -%}
+  {%- if recommendations.products_count > 0 -%}
     <section class="section">
       <div class="section-heading"><h2>You may also like</h2></div>
       <div class="product-grid">
