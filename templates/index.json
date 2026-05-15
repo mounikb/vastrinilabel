@@ -16,7 +16,8 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Screenshot_2026-04-23_140720_64ccc981-608e-4607-8c53-af4c62339c86.png",
-            "alt": "Editorial hero slide one",
+            "asset_image": "hero-rooted-tradition.png",
+            "alt": "Rooted in tradition made for you hero slide",
             "link": "/collections/all"
           }
         },
@@ -24,7 +25,8 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/ChatGPT_Image_May_16_2026_12_34_48_AM.png",
-            "alt": "Editorial hero slide two",
+            "asset_image": "hero-own-spotlight.png",
+            "alt": "Own the spotlight hero slide",
             "link": "/collections/all"
           }
         }

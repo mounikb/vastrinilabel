@@ -8,7 +8,15 @@
         {%- else -%}
           <div class="hero__slide-link" aria-label="{{ block.settings.alt | default: shop.name | escape }}">
         {%- endif -%}
-          {%- if block.settings.image != blank -%}
+          {%- if block.settings.asset_image != blank -%}
+            <img
+              src="{{ block.settings.asset_image | asset_url }}"
+              alt="{{ block.settings.alt | escape }}"
+              {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+              width="1674"
+              height="941"
+            >
+          {%- elsif block.settings.image != blank -%}
             <img
               src="{{ block.settings.image | image_url: width: 2200 }}"
               alt="{{ block.settings.alt | escape }}"
@@ -43,6 +51,7 @@
       "name": "Slide",
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "asset_image", "label": "Theme asset image filename" },
         { "type": "text", "id": "alt", "label": "Image description", "default": "Hero banner" },
         { "type": "url", "id": "link", "label": "Slide link" }
       ]
