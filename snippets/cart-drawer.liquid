@@ -26,10 +26,27 @@
       {%- endfor -%}
     </div>
     <div class="cart-drawer__foot">
+      {%- assign minimum_order_cents = settings.minimum_order_amount | default: 0 | times: 100 -%}
+      {%- assign minimum_remaining = minimum_order_cents | minus: cart.total_price -%}
+      {%- assign minimum_checkout_blocked = false -%}
+      {%- if minimum_order_cents > 0 and minimum_remaining > 0 -%}
+        {%- assign minimum_checkout_blocked = true -%}
+      {%- endif -%}
       <div class="row"><span>{{ 'cart.general.subtotal' | t }}</span><span>{{ cart.total_price | money }}</span></div>
+      {%- if minimum_checkout_blocked -%}
+        <div class="minimum-order-notice" role="status">
+          Add {{ minimum_remaining | money }} more to checkout. Minimum order value is {{ minimum_order_cents | money }}.
+        </div>
+      {%- endif -%}
       <p style="font-size:.78rem;color:var(--color-muted);margin:0 0 14px">{{ 'cart.general.shipping_at_checkout' | t }}</p>
       <a href="/cart" class="btn btn--secondary btn--block" style="margin-bottom:8px">{{ 'cart.general.view' | t }}</a>
-      <a href="/checkout" class="btn btn--primary btn--block">{{ 'cart.general.checkout' | t }}</a>
+      <a
+        href="/checkout"
+        class="btn btn--primary btn--block{% if minimum_checkout_blocked %} btn--disabled{% endif %}"
+        {% if minimum_checkout_blocked %}aria-disabled="true" data-min-checkout{% endif %}
+      >
+        {{ 'cart.general.checkout' | t }}
+      </a>
     </div>
   {%- else -%}
     <div class="cart-empty" style="padding:32px 0">

@@ -129,6 +129,14 @@
       await updateLine(removeButton.dataset.cartRemove, 0);
     });
 
+    document.addEventListener('click', (event) => {
+      const blockedCheckout = event.target.closest('[data-min-checkout][aria-disabled="true"]');
+      if (!blockedCheckout) return;
+      event.preventDefault();
+      const notice = document.querySelector('.cart-drawer.is-open .minimum-order-notice, .minimum-order-notice');
+      if (notice) notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
     document.addEventListener('click', async (event) => {
       const shareButton = event.target.closest('[data-share-product]');
       if (!shareButton) return;
@@ -327,6 +335,18 @@
     const removeText = 'Remove';
     const emptyText = 'Your cart is empty.';
     const continueText = 'Continue shopping';
+    const minimumOrderAmount = Number(window.VastriniTheme?.minimumOrderAmount || 0);
+    const minimumRemaining = Math.max(0, minimumOrderAmount - Number(cart?.total_price || 0));
+    const minimumBlocked = minimumOrderAmount > 0 && minimumRemaining > 0;
+    const minimumNotice = minimumBlocked
+      ? `<div class="minimum-order-notice" role="status">Add ${formatMoney(minimumRemaining)} more to checkout. Minimum order value is ${formatMoney(minimumOrderAmount)}.</div>`
+      : '';
+    const checkoutAttributes = minimumBlocked
+      ? ' aria-disabled="true" data-min-checkout'
+      : '';
+    const checkoutClasses = minimumBlocked
+      ? ' btn--disabled'
+      : '';
 
     if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
       return `
@@ -375,9 +395,10 @@
       <div class="cart-drawer__items">${itemsMarkup}</div>
       <div class="cart-drawer__foot">
         <div class="row"><span>${subtotalText}</span><span>${formatMoney(cart.total_price)}</span></div>
+        ${minimumNotice}
         <p style="font-size:.78rem;color:var(--color-muted);margin:0 0 14px">${shippingText}</p>
         <a href="/cart" class="btn btn--secondary btn--block" style="margin-bottom:8px">${viewCartText}</a>
-        <a href="/checkout" class="btn btn--primary btn--block">${checkoutText}</a>
+        <a href="/checkout" class="btn btn--primary btn--block${checkoutClasses}"${checkoutAttributes}>${checkoutText}</a>
       </div>
     `;
   }

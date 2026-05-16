@@ -47,11 +47,30 @@
 
       <div class="cart-totals">
         <div class="cart-totals__inner">
+          {%- assign minimum_order_cents = settings.minimum_order_amount | default: 0 | times: 100 -%}
+          {%- assign minimum_remaining = minimum_order_cents | minus: cart.total_price -%}
+          {%- assign minimum_checkout_blocked = false -%}
+          {%- if minimum_order_cents > 0 and minimum_remaining > 0 -%}
+            {%- assign minimum_checkout_blocked = true -%}
+          {%- endif -%}
           <div class="cart-totals__row"><span>{{ 'cart.general.subtotal' | t }}</span><span>{{ cart.total_price | money }}</span></div>
+          {%- if minimum_checkout_blocked -%}
+            <div class="minimum-order-notice" role="status">
+              Add {{ minimum_remaining | money }} more to checkout. Minimum order value is {{ minimum_order_cents | money }}.
+            </div>
+          {%- endif -%}
           <div class="cart-totals__row" style="font-size:.8rem;color:var(--color-muted)"><span>{{ 'cart.general.shipping_at_checkout' | t }}</span></div>
           <div style="display:flex;gap:8px;margin-top:18px">
             <button type="submit" name="update" class="btn btn--secondary" style="flex:1">{{ 'cart.general.update' | t }}</button>
-            <button type="submit" name="checkout" class="btn btn--primary" style="flex:2">{{ 'cart.general.checkout' | t }}</button>
+            <button
+              type="submit"
+              name="checkout"
+              class="btn btn--primary{% if minimum_checkout_blocked %} btn--disabled{% endif %}"
+              style="flex:2"
+              {% if minimum_checkout_blocked %}disabled aria-disabled="true" data-min-checkout{% endif %}
+            >
+              {{ 'cart.general.checkout' | t }}
+            </button>
           </div>
         </div>
       </div>

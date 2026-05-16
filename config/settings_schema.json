@@ -38,6 +38,12 @@
     ]
   },
   {
+    "name": "Checkout",
+    "settings": [
+      { "type": "range", "id": "minimum_order_amount", "label": "Minimum order value", "min": 0, "max": 20000, "step": 100, "unit": "Rs", "default": 0 }
+    ]
+  },
+  {
     "name": "Social",
     "settings": [
       { "type": "text", "id": "social_instagram_link", "label": "Instagram URL" },

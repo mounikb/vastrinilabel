@@ -31,7 +31,13 @@
 
     {% render 'social-meta-tags' %}
 
-    <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+      window.VastriniTheme = {
+        minimumOrderAmount: {{ settings.minimum_order_amount | default: 0 | times: 100 | json }}
+      };
+    </script>
 
     {{ content_for_header }}
 
