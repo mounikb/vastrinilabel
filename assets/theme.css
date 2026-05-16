@@ -128,7 +128,7 @@ button.site-header__nav-link{background:transparent;border:0}
 .hero__arrow svg{width:26px;height:26px}
 .hero__arrow--prev{left:24px}
 .hero__arrow--next{right:24px}
-@media(max-width:768px){.hero__slide-link::after{background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.04))}.hero__arrow{width:48px;height:48px;opacity:1}.hero__arrow--prev{left:12px}.hero__arrow--next{right:12px}}
+@media(max-width:768px){.hero__slide-link{overflow:hidden}.hero__slide-link img{width:112%;max-width:none;margin-left:-6%}.hero__slide-link::after{background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.04))}.hero__arrow{width:48px;height:48px;opacity:1}.hero__arrow--prev{left:12px}.hero__arrow--next{right:12px}}
 
 /* Marquee */
 .marquee{background:var(--color-primary);color:#fff;padding:14px 0;overflow:hidden;white-space:nowrap}
