@@ -3,8 +3,16 @@
   assign footer_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
   assign footer_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
   assign footer_contact_url = '/pages/contact'
+  assign footer_terms_url = '/pages/terms-and-conditions'
+  assign footer_whatsapp_href = section.settings.whatsapp_link
   if section.settings.contact_page != blank
     assign footer_contact_url = section.settings.contact_page.url
+  endif
+  if section.settings.terms_page != blank
+    assign footer_terms_url = section.settings.terms_page.url
+  endif
+  if footer_whatsapp_href == blank and section.settings.whatsapp_number != blank
+    assign footer_whatsapp_href = section.settings.whatsapp_number | remove: ' ' | prepend: 'tel:'
   endif
 -%}
 
@@ -14,10 +22,10 @@
       <div class="site-footer__brand">
         <div class="site-footer__contact-lines">
           {%- if section.settings.contact_email != blank -%}
-            <p>Email: <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></p>
+            <p>E-mail: <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></p>
           {%- endif -%}
           {%- if section.settings.whatsapp_number != blank -%}
-            <p>Whatsapp: <a href="{{ section.settings.whatsapp_link | default: '#' }}">{{ section.settings.whatsapp_number }}</a></p>
+            <p>Whatsapp: <a href="{{ footer_whatsapp_href }}">{{ section.settings.whatsapp_number }}</a></p>
           {%- endif -%}
         </div>
 
@@ -36,9 +44,17 @@
       <div class="site-footer__menu-col">
         <h4>{{ section.settings.help_heading }}</h4>
         <ul>
+          {%- assign has_terms_link = false -%}
           {%- for link in section.settings.help_menu.links -%}
+            {%- assign link_title_key = link.title | strip | downcase -%}
+            {%- if link_title_key contains 'terms' -%}
+              {%- assign has_terms_link = true -%}
+            {%- endif -%}
             <li><a href="{{ link.url }}">{{ link.title }}</a></li>
           {%- endfor -%}
+          {%- unless has_terms_link -%}
+            <li><a href="{{ footer_terms_url }}">Terms &amp; Conditions</a></li>
+          {%- endunless -%}
         </ul>
       </div>
 
@@ -95,13 +111,14 @@
 {
   "name": "Footer",
   "settings": [
-    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "vastarathelabel@gmail.com" },
-    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "default": "+91 6380 734 120" },
+    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "vastrini.label@gmail.com" },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "default": "6305700255" },
     { "type": "url", "id": "whatsapp_link", "label": "WhatsApp link" },
     { "type": "url", "id": "instagram_link", "label": "Instagram link" },
     { "type": "url", "id": "facebook_link", "label": "Facebook link" },
     { "type": "url", "id": "youtube_link", "label": "YouTube link" },
     { "type": "page", "id": "contact_page", "label": "Contact page" },
+    { "type": "page", "id": "terms_page", "label": "Terms page" },
     { "type": "text", "id": "help_heading", "label": "Help heading", "default": "Help" },
     { "type": "link_list", "id": "help_menu", "label": "Help menu", "default": "footer" },
     { "type": "text", "id": "quick_links_heading", "label": "Quick links heading", "default": "Quick Links" },

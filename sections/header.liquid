@@ -37,7 +37,7 @@
     assign new_arrivals_url = routes.all_products_collection_url | append: '/' | append: new_arrivals_tag
   endif
 
-  assign about_url = '/pages/about'
+  assign about_url = '/pages/about-us'
   if section.settings.about_page != blank
     assign about_url = section.settings.about_page.url
   endif
