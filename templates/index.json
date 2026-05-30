@@ -15,7 +15,8 @@
         "s1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_May_15_2026_04_31_35_PM_167de839-1ae5-435a-89c1-99478ef88688.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-05-30_at_1.21.46_PM_1.jpg",
+            "asset_image": "",
             "alt": "Editorial hero slide one",
             "link": "/collections/all"
           }
@@ -24,6 +25,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/ChatGPT_Image_May_15_2026_04_25_30_PM_eff3b82a-6a32-4e4d-86ae-5202c8c50ca5.png",
+            "asset_image": "",
             "alt": "Editorial hero slide two",
             "link": "/collections/all"
           }
