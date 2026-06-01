@@ -80,7 +80,8 @@
           "type": "tile",
           "settings": {
             "collection": "accessory",
-            "label": "",
+            "image": "shopify://shop_images/file_000000005b74720899bc46dbbe325036.png",
+            "label": "Jewellery",
             "subtext": "Shop now"
           }
         },
