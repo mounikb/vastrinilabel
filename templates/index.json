@@ -97,6 +97,7 @@
           "type": "tile",
           "settings": {
             "collection": "handbags",
+            "image": "shopify://shop_images/1000008444.png",
             "label": "",
             "subtext": "Shop now"
           }
