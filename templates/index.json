@@ -79,7 +79,7 @@
         "t1": {
           "type": "tile",
           "settings": {
-            "collection": "accessory",
+            "collection": "jhumka",
             "image": "shopify://shop_images/1000011068.jpg",
             "label": "Jewellery",
             "subtext": "Shop now"
