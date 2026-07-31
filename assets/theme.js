@@ -105,7 +105,7 @@
         if (!form.dataset.ajax) return;
         if (event.submitter && !event.submitter.matches('[data-add-to-cart-submit]')) return;
         event.preventDefault();
-        const button = form.querySelector('[type="submit"]');
+        const button = form.querySelector('[data-add-to-cart-submit]');
         if (button) {
           button.disabled = true;
           button.dataset.label = button.textContent;
@@ -696,7 +696,7 @@
     const optionInputs = form.querySelectorAll('[data-option-input]');
     const idInput = form.querySelector('[name="id"]');
     const priceEl = document.querySelector('[data-product-price]');
-    const submit = form.querySelector('[type="submit"]');
+    const submit = form.querySelector('[data-add-to-cart-submit]');
 
     function update() {
       const selected = Array.from(form.querySelectorAll('[data-option-input]:checked')).map((input) => input.value);
