@@ -1,4 +1,4 @@
-/* Berrylush Bloom - theme.js */
+/* Vastrinilabel - theme.js */
 (function () {
   'use strict';
 
@@ -71,6 +71,16 @@
     initModals();
     initShareModal();
 
+    document.querySelectorAll('[data-mobile-back]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (window.history.length > 1) {
+          window.history.back();
+          return;
+        }
+        window.location.href = button.dataset.fallbackUrl || '/';
+      });
+    });
+
     /* -------- Hero slideshow -------- */
     document.querySelectorAll('[data-hero]').forEach(initHero);
 
@@ -93,6 +103,7 @@
     document.querySelectorAll('[data-product-form]').forEach((form) => {
       form.addEventListener('submit', async (event) => {
         if (!form.dataset.ajax) return;
+        if (event.submitter && !event.submitter.matches('[data-add-to-cart-submit]')) return;
         event.preventDefault();
         const button = form.querySelector('[type="submit"]');
         if (button) {
@@ -330,7 +341,6 @@
     const drawerTitle = 'Cart';
     const subtotalText = 'Subtotal';
     const shippingText = 'Shipping and taxes calculated at checkout.';
-    const viewCartText = 'View cart';
     const checkoutText = 'Checkout';
     const removeText = 'Remove';
     const emptyText = 'Your cart is empty.';
@@ -351,6 +361,10 @@
     if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
       return `
         <div class="cart-drawer__head">
+          <button type="button" class="cart-drawer__back" data-close aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            <span>Back</span>
+          </button>
           <h3>${drawerTitle}</h3>
           <button data-close aria-label="Close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -387,6 +401,10 @@
 
     return `
       <div class="cart-drawer__head">
+        <button type="button" class="cart-drawer__back" data-close aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          <span>Back</span>
+        </button>
         <h3>${drawerTitle}</h3>
         <button data-close aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -397,7 +415,6 @@
         <div class="row"><span>${subtotalText}</span><span>${formatMoney(cart.total_price)}</span></div>
         ${minimumNotice}
         <p style="font-size:.78rem;color:var(--color-muted);margin:0 0 14px">${shippingText}</p>
-        <a href="/cart" class="btn btn--secondary btn--block" style="margin-bottom:8px">${viewCartText}</a>
         <a href="/checkout" class="btn btn--primary btn--block${checkoutClasses}"${checkoutAttributes}>${checkoutText}</a>
       </div>
     `;

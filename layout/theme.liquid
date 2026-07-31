@@ -77,6 +77,15 @@
 
     {% sections 'header-group' %}
 
+    {%- unless request.page_type == 'index' -%}
+      <div class="mobile-back-nav page-width">
+        <button type="button" class="mobile-back-nav__button" data-mobile-back data-fallback-url="{{ routes.root_url }}">
+          {% render 'icon', icon: 'arrow-left' %}
+          <span>Back</span>
+        </button>
+      </div>
+    {%- endunless -%}
+
     <main id="MainContent" role="main">
       {{ content_for_layout }}
     </main>

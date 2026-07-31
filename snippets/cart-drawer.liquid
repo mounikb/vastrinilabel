@@ -1,6 +1,10 @@
 {%- comment -%} Cart drawer (rendered globally via theme.liquid) {%- endcomment -%}
 <div class="cart-drawer" id="CartDrawer" aria-hidden="true">
   <div class="cart-drawer__head">
+    <button type="button" class="cart-drawer__back" data-close aria-label="Back">
+      {% render 'icon', icon: 'arrow-left' %}
+      <span>Back</span>
+    </button>
     <h3>{{ 'cart.general.title' | t }}</h3>
     <button data-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'icon', icon: 'close' %}</button>
   </div>
@@ -39,7 +43,6 @@
         </div>
       {%- endif -%}
       <p style="font-size:.78rem;color:var(--color-muted);margin:0 0 14px">{{ 'cart.general.shipping_at_checkout' | t }}</p>
-      <a href="/cart" class="btn btn--secondary btn--block" style="margin-bottom:8px">{{ 'cart.general.view' | t }}</a>
       <a
         href="/checkout"
         class="btn btn--primary btn--block{% if minimum_checkout_blocked %} btn--disabled{% endif %}"

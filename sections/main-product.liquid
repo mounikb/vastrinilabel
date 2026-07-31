@@ -4,6 +4,7 @@
   assign product_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
   assign product_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
   assign product_share_url = shop.url | append: product.url
+  assign variants_json = product.variants | json | escape
 -%}
 <div class="page-width">
   <div class="product">
@@ -28,6 +29,11 @@
       <div class="product__panel">
       {%- if product.vendor != blank -%}<div class="product__vendor">{{ product.vendor }}</div>{%- endif -%}
       <h1 class="product__title">{{ product.title }}</h1>
+      {%- for block in section.blocks -%}
+        <div class="product__app-block" {{ block.shopify_attributes }}>
+          {% render block %}
+        </div>
+      {%- endfor -%}
       <div class="product__price">
         <span data-product-price>{{ current_variant.price | money }}</span>
         {%- if product.compare_at_price > product.price -%}
@@ -40,7 +46,7 @@
         <span>Secure checkout</span>
       </div>
 
-      <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" data-product-form data-ajax="true" data-variants="{{ product.variants | json | escape }}">
+      {%- form 'product', product, data-product-form: '', data-ajax: 'true', data-variants: variants_json -%}
         <input type="hidden" name="id" value="{{ current_variant.id }}">
 
         {%- unless product.has_only_default_variant -%}
@@ -76,10 +82,14 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn--primary btn--block btn--lg" data-add-text="{{ 'products.product.add_to_cart' | t }}" data-sold-text="{{ 'products.product.sold_out' | t }}" {% unless current_variant.available %}disabled{% endunless %}>
+        <button type="submit" class="btn btn--primary btn--block btn--lg" data-add-to-cart-submit data-add-text="{{ 'products.product.add_to_cart' | t }}" data-sold-text="{{ 'products.product.sold_out' | t }}" {% unless current_variant.available %}disabled{% endunless %}>
           {%- if current_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
         </button>
-      </form>
+
+        <div class="product__payment-button">
+          {{ form | payment_button }}
+        </div>
+      {%- endform -%}
 
       {%- if product.description != blank -%}
         <div class="product__desc">{{ product.description }}</div>
@@ -115,6 +125,45 @@
     </div>
   </div>
 
+  <section class="section app-section product-reviews">
+    <div class="section-heading">
+      <span class="eyebrow">Verified reviews</span>
+      <h2>Customer reviews</h2>
+    </div>
+    <!-- Start of Judge.me code -->
+    {%- assign has_legacy = false -%}
+    {%- if product.metafields.judgeme.widget.size > 20 -%}
+      {%- assign has_legacy = true -%}
+    {%- endif -%}
+    <div style="clear:both"></div>
+    <div
+      id="judgeme_product_reviews"
+      class="jdgm-widget jdgm-review-widget"
+      data-product-title="{{ product.title | escape }}"
+      data-id="{{ product.id }}"
+      data-product-id="{{ product.id }}"
+      data-widget="review"
+      data-auto-install="false"
+      data-shop-reviews-count="{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}"
+      data-entry-point="review_widget.js"
+      data-entry-key="review-widget/main.js"
+    >
+      {%- if has_legacy -%}
+        <div class="jdgm-legacy-widget-content" style="display:none">
+          {{ product.metafields.judgeme.widget }}
+        </div>
+      {%- endif -%}
+    </div>
+    {%- if product.metafields.judgeme.review_widget_data -%}
+      <script>
+        jdgm.data ||= {};
+        jdgm.data.reviewWidget ||= {};
+        jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }};
+      </script>
+    {%- endif -%}
+    <!-- End of Judge.me code -->
+  </section>
+
   {%- if recommendations.products_count > 0 -%}
     <section class="section">
       <div class="section-heading"><h2>You may also like</h2></div>
@@ -134,6 +183,9 @@
     { "type": "url", "id": "instagram_link", "label": "Instagram link" },
     { "type": "url", "id": "facebook_link", "label": "Facebook link" },
     { "type": "url", "id": "youtube_link", "label": "YouTube link" }
+  ],
+  "blocks": [
+    { "type": "@app" }
   ]
 }
 {% endschema %}

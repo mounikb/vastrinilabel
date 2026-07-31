@@ -1,7 +1,7 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Berrylush Bloom",
+    "theme_name": "Vastrinilabel",
     "theme_version": "1.0.0",
     "theme_author": "Lovable",
     "theme_documentation_url": "https://lovable.dev",
@@ -35,12 +35,6 @@
     "settings": [
       { "type": "range", "id": "page_width", "label": "Page width", "min": 1200, "max": 1600, "step": 20, "unit": "px", "default": 1400 },
       { "type": "range", "id": "border_radius", "label": "Corner radius", "min": 0, "max": 24, "step": 1, "unit": "px", "default": 4 }
-    ]
-  },
-  {
-    "name": "Checkout",
-    "settings": [
-      { "type": "range", "id": "minimum_order_amount", "label": "Minimum order value", "min": 0, "max": 20000, "step": 100, "unit": "Rs", "default": 0 }
     ]
   },
   {

@@ -4,7 +4,7 @@
   {%- if cart.item_count == 0 -%}
     <div class="cart-empty">
       <p>{{ 'cart.general.empty' | t }}</p>
-      <a href="/collections/all" class="btn btn--primary">{{ 'cart.general.continue_shopping' | t }}</a>
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'cart.general.continue_shopping' | t }}</a>
     </div>
   {%- else -%}
     <form action="{{ routes.cart_url }}" method="post" novalidate>
@@ -22,7 +22,9 @@
               <td colspan="4" style="border:0;padding:0">
                 <div class="cart-row">
                   <a href="{{ item.url }}">
-                    {%- if item.image -%}<img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.product.title | escape }}" width="90" height="120" loading="lazy">{%- endif -%}
+                    {%- if item.image -%}
+                      <img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.product.title | escape }}" width="90" height="120" loading="lazy">
+                    {%- endif -%}
                   </a>
                   <div>
                     <a href="{{ item.url }}"><div class="cart-row__title">{{ item.product.title }}</div></a>
@@ -33,9 +35,9 @@
                     <a href="{{ item.url_to_remove }}" class="cart-row__remove">{{ 'cart.general.remove' | t }}</a>
                   </div>
                   <div class="qty" data-qty>
-                    <button type="button" data-qty-minus>-</button>
+                    <button type="button" data-qty-minus aria-label="Decrease">-</button>
                     <input type="number" name="updates[]" value="{{ item.quantity }}" min="0">
-                    <button type="button" data-qty-plus>+</button>
+                    <button type="button" data-qty-plus aria-label="Increase">+</button>
                   </div>
                   <div style="text-align:right;font-weight:500">{{ item.final_line_price | money }}</div>
                 </div>
