@@ -299,6 +299,7 @@ button.site-header__nav-link{background:transparent;border:0}
 .product__price{font-size:1.45rem;margin-bottom:22px;display:flex;gap:12px;align-items:baseline}
 .product__payment-button{margin-top:12px}
 .product__payment-button .shopify-payment-button__button{border-radius:var(--radius)}
+.product__form-error{margin:12px 0 0;padding:12px 14px;border:1px solid rgba(170,37,62,.24);border-radius:14px;background:rgba(170,37,62,.07);color:#8d2345;font-size:.88rem;line-height:1.5}
 .product__highlights{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
 .product__highlights span{padding:9px 14px;border-radius:999px;background:rgba(141,35,69,.08);color:#8d2345;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
 .product__option{margin:0 0 18px;padding:0;border:0}

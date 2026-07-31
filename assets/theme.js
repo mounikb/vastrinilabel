@@ -106,6 +106,11 @@
         if (event.submitter && !event.submitter.matches('[data-add-to-cart-submit]')) return;
         event.preventDefault();
         const button = form.querySelector('[data-add-to-cart-submit]');
+        const errorMessage = form.querySelector('[data-product-form-error]');
+        if (errorMessage) {
+          errorMessage.hidden = true;
+          errorMessage.textContent = '';
+        }
         if (button) {
           button.disabled = true;
           button.dataset.label = button.textContent;
@@ -118,11 +123,23 @@
             body: formData,
             headers: { Accept: 'application/json' }
           });
-          if (!response.ok) throw new Error('Add failed');
+          if (!response.ok) {
+            let message = 'Unable to add this item to your cart. Please try again.';
+            try {
+              const responseBody = await response.json();
+              message = responseBody.description || responseBody.message || message;
+            } catch (parseError) {
+              // Keep the customer-facing fallback when Shopify returns a non-JSON response.
+            }
+            throw new Error(message);
+          }
           await refreshCart();
           openCartDrawer();
         } catch (error) {
-          window.location.href = '/cart';
+          if (errorMessage) {
+            errorMessage.textContent = error.message || 'Unable to add this item to your cart. Please try again.';
+            errorMessage.hidden = false;
+          }
         } finally {
           if (button) {
             button.disabled = false;
