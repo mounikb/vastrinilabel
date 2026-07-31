@@ -692,18 +692,31 @@
   }
 
   function initVariant(form) {
-    const variants = JSON.parse(form.dataset.variants || '[]');
+    const variantSelect = form.querySelector('[data-variant-select]');
+    const variants = variantSelect
+      ? Array.from(variantSelect.options).map((option) => ({
+          id: option.value,
+          options: option.textContent.trim() === 'Default Title' ? [] : option.textContent.trim().split(' / '),
+          price: Number(option.dataset.price || 0),
+          available: option.dataset.available === 'true'
+        }))
+      : [];
     const optionInputs = form.querySelectorAll('[data-option-input]');
-    const idInput = form.querySelector('[name="id"]');
     const priceEl = document.querySelector('[data-product-price]');
     const submit = form.querySelector('[data-add-to-cart-submit]');
 
     function update() {
       const selected = Array.from(form.querySelectorAll('[data-option-input]:checked')).map((input) => input.value);
-      const match = variants.find((variant) => JSON.stringify(variant.options) === JSON.stringify(selected));
+      const match = variants.find((variant) => {
+        if (!selected.length) return variantSelect && variant.id === variantSelect.value;
+        return JSON.stringify(variant.options) === JSON.stringify(selected);
+      });
       if (!match) return;
 
-      idInput.value = match.id;
+      if (variantSelect) {
+        variantSelect.value = match.id;
+        variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       if (priceEl) priceEl.textContent = formatMoney(match.price);
       if (submit) {
         submit.disabled = !match.available;

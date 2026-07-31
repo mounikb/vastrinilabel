@@ -4,7 +4,6 @@
   assign product_facebook_link = section.settings.facebook_link | default: settings.social_facebook_link | default: 'https://www.facebook.com/'
   assign product_youtube_link = section.settings.youtube_link | default: settings.social_youtube_link | default: 'https://www.youtube.com/'
   assign product_share_url = shop.url | append: product.url
-  assign variants_json = product.variants | json | escape
 -%}
 <div class="page-width">
   <div class="product">
@@ -46,8 +45,20 @@
         <span>Secure checkout</span>
       </div>
 
-      {%- form 'product', product, data-product-form: '', data-ajax: 'true', data-variants: variants_json -%}
-        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {%- form 'product', product, data-product-form: '', data-ajax: 'true' -%}
+        <label class="visually-hidden" for="ProductVariant-{{ section.id }}">Variant</label>
+        <select id="ProductVariant-{{ section.id }}" name="id" class="visually-hidden" data-variant-select>
+          {%- for variant in product.variants -%}
+            <option
+              value="{{ variant.id }}"
+              data-price="{{ variant.price }}"
+              data-available="{{ variant.available }}"
+              {% if variant == current_variant %}selected{% endif %}
+            >
+              {{ variant.title }}
+            </option>
+          {%- endfor -%}
+        </select>
 
         {%- unless product.has_only_default_variant -%}
           {%- for option in product.options_with_values -%}
