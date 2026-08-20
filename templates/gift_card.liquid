@@ -2,7 +2,7 @@
 <html lang="{{ request.locale.iso_code }}">
 <head>
   <meta charset="utf-8">
-  <title>{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money, shop: shop.name }}</title>
+  <title>{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money: shop: shop.name }}</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   {{ content_for_header }}
   {{ 'theme.css' | asset_url | stylesheet_tag }}
@@ -22,3 +22,15 @@
   </main>
 </body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money,
+    shop: shop.name }}"
+  to: "{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money: shop:
+    shop.name }}"
+  position: 101..193
+{% endcomment %}
